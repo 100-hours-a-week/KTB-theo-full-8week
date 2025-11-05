@@ -1,0 +1,8 @@
+.login-wrapper {
+    border: 1px solid black;
+    box-sizing: border-box;
+}
+
+.login-input {
+    border: 1px solid red;
+}
