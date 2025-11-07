@@ -1,5 +1,7 @@
-import { activeCss } from "./lib/dom";
+import { activeCommonCss } from "./lib/dom.js";
 const HEADER_CSS_PATH = '/header.css'
+
+activeCommonCss(HEADER_CSS_PATH);
 
 export function header() {
     const root = document.createElement('div');

@@ -1,5 +1,5 @@
 const FUEATURES_CSS_PATH_PREFIX = './assets/js/features';
-const COMMONT_CSS_PATH_PREFIX = '..'
+const COMMON_CSS_PATH_PREFIX = './assets/js/shared'
 
 /**
  * 
@@ -16,7 +16,7 @@ export function activeFeatureCss(href) {
     } else {
         const link = document.createElement('link')
         link.rel = 'stylesheet';
-        link.href = CSS_PATH_PREFIX + href;
+        link.href = FUEATURES_CSS_PATH_PREFIX + href;
         document.head.appendChild(link);
     }
 
@@ -32,7 +32,7 @@ export function activeCommonCss(href) {
     } else {
         const link = document.createElement('link')
         link.rel = 'stylesheet';
-        link.href = CSS_PATH_PREFIX + href;
+        link.href = COMMON_CSS_PATH_PREFIX + href;
         document.head.appendChild(link);
     }
 }

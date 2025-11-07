@@ -1,10 +1,13 @@
-import { activeCss } from "../../../shared/lib/dom.js";
+import { activeFeatureCss } from "../../../shared/lib/dom.js";
+import { Api } from '../../../shared/lib/api.js';
 
 const LOGIN_CSS_PATH = '/auth/ui/login.css';
 const EMAIL_REGEX = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,}$/i;
 const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9])\S{8,20}$/;
 
-activeCss(LOGIN_CSS_PATH);
+const LOGIN_API_URL = '/auth/access/token';
+
+activeFeatureCss(LOGIN_CSS_PATH);
 
 export function login() {
     const root = document.createElement("div");
@@ -31,7 +34,7 @@ export function login() {
             </div>
         </div>`;
 
-    const form = root.querySelector('#login-form');
+    const form = document.getElementById('login-form');
     const email = root.querySelector('#email');
     const password = root.querySelector('#password');
     const loginButton = root.querySelector('#login-btn');
@@ -90,9 +93,26 @@ export function login() {
 
     }
 
-    form.addEventListener('submit', (e) => {
+    async function loginRequest() {
+        try {
+            const loginRequest = await new Api()
+                .post()
+                .url(LOGIN_API_URL)
+                .body({
+                    email: email.value,
+                    password: password.value
+                })
+                .request();
+            const response = await loginRequest.request();
+            console.log(response);
+        } catch (err) {
+            console.log('login fail', err);
+        }
+    }
+
+
+    form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        handleLoginFail();
     })
 
     email.addEventListener('input', () => {
