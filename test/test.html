@@ -5,28 +5,20 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="test.css">
+    <script src="./test.js"></script>
     <title>Document</title>
 </head>
 
 <body>
-    <div class="login-wrapper">
-        <h2>로그인</h2>
-        <div>
-            <form method="post" action="" id="login-form">
-                <div>
-                    <label class="login-label" for="email">이메일</label><br>
-                    <input id="email" name="email" type="email" class="login-input" required />
-                </div>
-                <div>
-                    <label class="login-label" for="password">비밀번호</label><br>
-                    <input id="password" name="password" type="password" class="login-input" required />
-                </div>
-                <p>* helper text</p>
-                <button class="login-btn" type="submit">로그인</button>
-            </form>
-        </div>
-        <div>
-            <a href="/signup"> 회원가입</a>
+    <div class="common-header-container">
+        <div class="common-header-wrapper">
+            <div class="common-header-left">
+                <button id="common-back-btn">&lt;</button>
+            </div>
+            <div class="common-header-center">아무 말 대잔치</div>
+            <div class="common-header-right">
+                <img id="common-header-userprofile" src="../public/assets/img/noneProfile.png">
+            </div>
         </div>
     </div>
 </body>
