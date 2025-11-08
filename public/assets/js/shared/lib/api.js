@@ -1,47 +1,31 @@
 
-/*
+import { ApiError } from "./api-error.js";
 
-curl -X 'POST' \
-  'http://localhost:8080/user' \
-  -H 'accept: application/json' \
-  -H 'Content-Type: application/json' \
-  -d '{
-  "email": "test@test.com",
-  "password": "1q2w3e4r!Q",
-  "nickname": "nickname",
-  "profileImage": "https://www.test.com"
-}'
-
-curl -X 'GET' \
-  'http://localhost:8080/user/1' \
-  -H 'accept: application/json' \
-  -H 'Authorization: Bearer eyJhbGciOiJIbWFjU0hBMjU2IiwidHlwIjoiSldUIn0.eyJpYXQiOjE3NjIyNTg5MDIxNTUsImlzcyI6IktUQi01V0VFSyIsInN1YiI6InRva2VuIiwiZXhwIjoxNzYyMjU5NTAyMTU1fQ.k6JuahFvW53rQJfynvFBIgKJILwzN94mdtNxQQEN40c'
-*/
 const API_SERVER_URL = "http://localhost:8080/";
 export class Api {
     #method = 'GET';
     #url = '';
     #headers = { 'Content-Type': 'application/json' };
     #body = {};
-    #quertString = {};
+    #queryString = {};
 
-    get(method = 'GET') {
-        this.#method = method;
+    get() {
+        this.#method = 'GET';
         return this;
     }
 
-    post(method = 'POST') {
-        this.#method = method;
+    post() {
+        this.#method = 'POST';
         return this;
     }
 
-    put(method = 'PUT') {
-        this.#method = method;
+    put() {
+        this.#method = 'PUT';
         return this;
     }
 
-    delete(method = 'DELETE') {
-        this.#method = method;
+    delete() {
+        this.#method = 'DELETE';
         return this;
     }
 
@@ -50,8 +34,8 @@ export class Api {
         return this;
     }
 
-    headers(headers = { 'Content- Type': 'application/json' }) {
-        this.#headers = structuredClone(headers);
+    headers(headers = {}) {
+        this.#headers = { ...this.#headers, ...headers }
         return this;
     }
 
@@ -61,7 +45,7 @@ export class Api {
     }
 
     queryString(queryString = {}) {
-        this.#quertString = { ...queryString };
+        this.#queryString = { ...queryString };
         return this;
     }
     print() {
@@ -70,19 +54,18 @@ export class Api {
             url: this.#url,
             headers: this.#headers,
             body: this.#body,
-            queryString: this.#quertString
+            queryString: this.#queryString
         });
         return this;
     }
-
 
     buildURL() {
         if (!this.#url) {
             throw new Error('URL이 필요합니다.');
         }
         const url = new URL(this.#url, API_SERVER_URL);
-        for (var key in this.#quertString) {
-            url.searchParams.append(key, this.#quertString[key]);
+        for (var key in this.#queryString) {
+            url.searchParams.append(key, this.#queryString[key]);
         }
         return url.toString();
     }
@@ -105,36 +88,23 @@ export class Api {
         const url = this.buildURL();
         const options = this.buildOptions();
 
-        if (this.#method === 'GET') {
-        }
         const response = await fetch(url, options);
-        return await response.json();
+        const result = await response.json();
+
+        // 4XX, 5XX 응답
+        if (!response.ok) {
+            console.log(result);
+            // api 에러 처리
+            throw new ApiError(
+                result.code,
+                result.status,
+                result.message,
+                result.path
+            );
+        }
+
+        // 2XX 응답
+        return result;
+
     }
 }
-
-const api_test = new Api();
-api_test
-    .get()
-    .url("/api/auth/login")
-    .body({
-        email: "test@test.com",
-        password: "1q2w3e4r!Q",
-        nickname: "nickname",
-        profileImage: "https://www.test.com"
-    })
-    .queryString({
-        id: 1,
-        page: 2
-    });
-
-const login = new Api()
-    .post()
-    .url(`/auth/access/token`)
-    .body({
-        email: "test@test.com", password: "1q2w3e4r!Q"
-    });
-
-// console.log(login.buildURL());
-// console.log(login.buildOptions());
-// const response = await login.request();
-// console.log(response);

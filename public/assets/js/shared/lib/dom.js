@@ -19,7 +19,6 @@ export function activeFeatureCss(href) {
         link.href = FUEATURES_CSS_PATH_PREFIX + href;
         document.head.appendChild(link);
     }
-
 }
 
 export function activeCommonCss(href) {

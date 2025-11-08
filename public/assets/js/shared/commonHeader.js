@@ -3,7 +3,7 @@ const HEADER_CSS_PATH = '/header.css'
 
 activeCommonCss(HEADER_CSS_PATH);
 
-export function header() {
+export function commonHeader() {
     const root = document.createElement('div');
     root.className = "common-header-container";
     root.innerHTML =
