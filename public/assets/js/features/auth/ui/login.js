@@ -19,27 +19,27 @@ export function login() {
             <div>
                 <form id="login-form">
                     <div class="login-field">
-                        <label class="login-label" for="email">이메일</label>
-                        <input id="email" name="email" type="email" class="login-input" 
+                        <label class="login-label" for="login-form-email">이메일</label>
+                        <input id="login-form-email" name="email" type="email" class="login-input" 
                         required placeholder="이메일을 입력하세요"/>
                     </div>
                     <div class="login-field">
-                        <label class="login-label" for="password">비밀번호</label>
-                        <input id="password" name="password" type="password" class="login-input" 
+                        <label class="login-label" for="login-form-password">비밀번호</label>
+                        <input id="login-form-password" name="password" type="password" class="login-input" 
                         required placeholder="비밀번호를 입력하세요"/>
                     </div>
-                    <p id="helper-text"></p>
+                    <p id="login-from-helper-text"></p>
                     <button id="login-btn" type='submit' disabled>로그인</button>
                 </form>
-                <a id="signup" href="/signup"> 회원가입</a>
+                <a id="login-to-signup-link" href="/signup"> 회원가입</a>
             </div>
         </div>`;
 
     const form = root.querySelector('#login-form');
-    const email = root.querySelector('#email');
-    const password = root.querySelector('#password');
+    const email = root.querySelector('#login-form-email');
+    const password = root.querySelector('#login-form-password');
     const loginButton = root.querySelector('#login-btn');
-    const helperText = root.querySelector('#helper-text');
+    const helperText = root.querySelector('#login-form-helper-text');
 
     // 이벤트 리스너 등록
     // 1. 로그인 폼 태그 이벤트 등록
@@ -49,7 +49,13 @@ export function login() {
         if (loginButton.disabled) return;
 
         try {
-            await loginRequest();
+            const response = await loginRequest();
+            const responseBody = response.data;
+            const isLoginSuccess = responseBody.loginSuccess;
+
+            if (isLoginSuccess) {
+                // TODO: 로그인 성공 시 게시글 목록화면으로 라우팅 처리 필요
+            }
         } catch (error) {
             if (error instanceof ApiError) {
                 handleLoginFail(error);

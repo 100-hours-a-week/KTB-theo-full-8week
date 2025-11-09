@@ -1,75 +1,132 @@
-.common-header-container {
-    position: sticky;
-    top: 0;
-    z-index: 50;
-    height: 100px;
+.signup-form-container {
+    border: 1px solid black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
-.common-header-wrapper {
-    height: 100%;
+
+.signup-form-wrapper {
+    width: 35%;
+    border: 1px solid black;
+    box-sizing: border-box;
+    padding: 3%;
+}
+
+.signup-form-wrapper > h2 {
+    text-align: center;
+}
+
+.signup-field {
+    max-width: 100%;
+}
+
+.signup-profile-field{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.signup-profile-field .signup-label,
+.signup-profile-field .signup-form-helper-text {
+    align-self: flex-start;
+    margin-left : 0;
+    margin-right: 0;
+}
+
+.signup-input {
+    display: block;
+    width: 98%;
+    border: 1px solid black;
+    padding:2% 0;
+    padding-left: 1%;
     margin: 0 auto;
-
-    display: grid;
-    grid-template-columns: 1fr max-content 1fr;
-    align-items: center;
-
-    border-bottom: 1px solid black;
+    font-size: 1rem;
+    border-radius: 10px;
+    resize: none;
 }
 
-.common-header-left {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-
-    padding-right: 15%;
+.signup-label {
+    display: block;
+    margin: 0 auto;
+    margin-bottom: 2%;
+    text-align: left;
 }
 
-.common-header-center {
-    display: flex;
+.signup-form-helper-text {
+    display: block;
+    text-align: left;
+    width: 100%;
+    max-width: 100%;
+    white-space: inherit;
+    overflow-wrap: anywhere;
+    box-sizing: border-box;
+    color: #FF3333;
+    font-size: 0.8rem;
+}
+
+#signup-form {
+    max-width: 100%;
+    max-height: 30%;
+    width: 100%;
+    height: 100%;
+    margin-bottom: 20%;
+    text-align: center;
+}
+
+#signup-form .signup-field {
+    text-align: left;
+    margin-bottom: 5%;
+}
+
+#signup-form .signup-field:nth-child(5) {
+    margin-bottom: 1%;
+}
+
+#signup-form-profile-image {
+    display: none;
+}
+
+#signup-image-upload-btn {
+    width: 150px;
+    height: 150px;
+    border: none;
+    border-radius: 50%;
+    outline: none;
+    cursor: pointer;
+
+    display: inline-flex;
     align-items: center;
     justify-content: center;
 
-    font-family: Sandoll GogoRound;
-    font-weight: 400;
-    font-style: 03 Rg;
-    font-size: 32px;
-    line-height: 100%;
-    letter-spacing: 0%;
+    background-color: #C4C4C4;
+    font-size: 2rem;
+}
+
+#signup-btn {
+    display: block;
     text-align: center;
+    width: 100%;
+    padding: 2% 0;
+    margin: 0 auto;
+    height: 50%;
+    border-radius: 10px;
+    color: white;
+    background-color: #ACA0EB;
 }
 
-.common-header-right {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-
-    padding-left: 15%;
-}
-
-#common-back-btn {
-    width: 38px;
-    height: 38px;
-
-    border: none;
-    background: none;
+#signup-btn.active {
+    background-color: #7F6AEE;
     cursor: pointer;
+}
 
+#signup-form {
+    border: 1px sollid black;
+}
 
-    font-family: Sandoll GogoRound;
-    font-weight: 400;
-    font-style: 03 Rg;
-    font-size: 36px;
-    line-height: 100%;
-    letter-spacing: 0%;
+#signup-to-login-link {
+    display: block;
+    color: black;
+    text-decoration-line: none;
     text-align: center;
 }
 
-#common-header-userprofile {
-    width: 34px;           
-    height: 34px;          
-    border: 0;
-    border-radius: 50%;    
-    object-fit: cover;     
-    object-position: center;
-    display: block;       
-    border: 1px solid black;
-}

@@ -53,7 +53,6 @@
 }
 
 #login-form .login-field:nth-child(2) {
-    text-align: left;
     margin-bottom: 1%;
 }
 
@@ -74,7 +73,7 @@
     cursor: pointer;
 }
 
-#helper-text {
+#login-form-helper-text {
     display: block;
     text-align: left;
     width: 100%;
@@ -86,7 +85,7 @@
     font-size: 0.8rem;
 }
 
-#signup {
+#login-to-signup-link {
     display: block;
     color: black;
     text-decoration-line: none;
