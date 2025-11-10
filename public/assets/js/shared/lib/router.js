@@ -1,10 +1,12 @@
 import { login } from "../../features/auth/ui/login.js"
-import { signUp } from "../../features/user/ui/signup.js"
+import { signup } from "../../features/user/ui/signup.js"
+import { postCardList } from "../../features/post/ui/postCardList.js";
 
 const routes = [
     { path: "/", render: login },
     { path: "/login", render: login },
-    { path: "/signup", render: signUp }
+    { path: "/signup", render: signup },
+    { path: "/post", render: postCardList }
 ]
 
 function findRoute(pathname) {

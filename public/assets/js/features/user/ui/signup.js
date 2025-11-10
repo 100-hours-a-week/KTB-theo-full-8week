@@ -1,6 +1,7 @@
 import { activeFeatureCss } from "../../../shared/lib/dom.js";
 import { Api } from "../../../shared/lib/api.js";
 import { navigate } from "../../../shared/lib/router.js";
+import { ApiError } from "../../../shared/lib/api-error.js";
 
 // CSS Path
 const SIGNUP_CSS_PATH = '/user/ui/signup.css'
@@ -12,10 +13,12 @@ const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9])\S{8,20
 
 // API 요청 URL
 const NICKNAME_DOUBLE_CHECK_URL = '/user/nickname/double-check';
+const EAMIL_DOUBLE_CHECK_URL = '/user/email/double-check';
+const SIGNUP_URL = '/user'
 
 activeFeatureCss(SIGNUP_CSS_PATH);
 
-export function signUp() {
+export function signup() {
     const root = document.createElement('div');
     root.className = "signup-form-container"
     root.innerHTML =
@@ -81,11 +84,26 @@ export function signUp() {
             }
         });
 
+    // 닉네임 중복 여부
     let isAvailableNickname = false;
+    // 이메일 중복 여부
+    let isAvailableEmail = false;
 
     // 회원가입 폼 이벤트 등록
-    form.addEventListener('submit', () => {
+    form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        console.log("disabled", signupButton.disabled);
+        if (signupButton.disabled) return;
 
+        try {
+            const response = await requestSignup();
+            const responseBody = response.data;
+            console.log(responseBody);
+        } catch (error) {
+            if (error instanceof ApiError) {
+                // handleSignupFail(error);
+            }
+        }
     })
 
     // 회원 프로필 이미지 업로드 버튼 이벤트 등록
@@ -93,37 +111,34 @@ export function signUp() {
         profileImageInput.click();
     })
 
-    // 회원 프로필 이미지 input 태그 이벤트 등록
+    // 회원 프로필 이미지 첨부 input 태그 이벤트 등록
     profileImageInput.addEventListener('change', () => {
-        const file = profileImageInput.files[0];
-        console.log(file.path)
-        profileImageUploadButton.classList.remove('upload');
-        if (!file) {
-            profileImageUploadButton.innerHTML = '+';
-            helperTexts['profile-image'].textContent = '';
-            return;
-        }
+        handleProfileImageInput();
 
-        if (!file.type.startsWith('image/')) {
-            profileImageUploadButton.innerHTML = '+';
-            helperTexts['profile-image'].textContent = '이미지 파일만 업로드 가능합니다.'
-        }
-
-        helperTexts['profile-image'].textContent = '';
-
-        const url = URL.createObjectURL(file);
-        profileImageUploadButton.classList.add('upload');
-        profileImageUploadButton.innerHTML =
-            `
-                <img id="sign-form-preview" src="${url}"/>
-            `;
     })
+
+    // 회원 프로필 이미지 input 태그 첨부 여부 확인 이벤트 등록(input)
+    profileImageInput.addEventListener('input', () => {
+        handleInvalidProfileImage();
+    })
+
     // 이메일 이벤트 등록
     emailInput.addEventListener('input', () => {
         handleInvalidEmail();
+        isAvailableEmail = false;
         activeSignUpButton();
     })
 
+    //  닉네임 input 태그 이벤트 등록(blur)
+    emailInput.addEventListener('blur', async () => {
+        // 닉네임 유효성 검증 완료해야 중복 검사API 요청
+        const isValidEmail = handleInvalidEmail();
+        if (!isValidEmail) {
+            return;
+        }
+        isAvailableEmail = await handleEmailDuplication();
+        activeSignUpButton();
+    })
     //패스워드 이벤트 등록
     passwordInput.addEventListener('input', () => {
         handleInvalidPassword();
@@ -144,10 +159,6 @@ export function signUp() {
         activeSignUpButton();
     })
 
-    loginLink.addEventListener('click', (event) => {
-        event.preventDefault();
-        navigate('/login');
-    })
     //  닉네임 input 태그 이벤트 등록(blur)
     nicknameInput.addEventListener('blur', async () => {
         // 닉네임 유효성 검증 완료해야 중복 검사API 요청
@@ -159,29 +170,43 @@ export function signUp() {
         activeSignUpButton();
     })
 
+    // '로그인 하러가기' a태그 이벤트 등록(click)
+    loginLink.addEventListener('click', (event) => {
+        event.preventDefault();
+        navigate('/login');
+    })
+
+
+    // 회원가입 버튼 활성화
     function activeSignUpButton() {
         const email = String(emailInput.value).trim();
         const password = String(passwordInput.value).trim();
         const passwordConfirm = String(passwordConfirmInput.value).trim();
         const nickname = String(nicknameInput.value).trim();
+        const profileImage = profileImageInput.files[0];
 
-        const isFilled = email && password && passwordConfirm && nickname;
+        const isFilled = email && password && passwordConfirm && nickname && profileImage;
 
+        // 입력 폼이 모두 채워진 경우
         if (!isFilled) {
             signupButton.classList.remove('active');
             signupButton.disabled = true;
             return;
         }
 
+        // 유효성 검증
         const isEmailValid = handleInvalidEmail();
         const isPassowordValid = handleInvalidPassword();
         const isEqualPassword = handleEqualPasswordInput();
         const isNicknamePatternValid = handleInvalidNicknamePattern();
+        const isProfileImageValid = handleInvalidProfileImage();
 
-        const canActive = isEmailValid && isPassowordValid && isEqualPassword && isNicknamePatternValid && isAvailableNickname;
+        const canActive = isEmailValid && isPassowordValid && isEqualPassword && isNicknamePatternValid
+            && isAvailableEmail && isAvailableNickname && isProfileImageValid;
         signupButton.classList.toggle('active', canActive);
         signupButton.disabled = !canActive;
     }
+
     // 닉네임 유효성 검증 핸들러
     function handleInvalidNicknamePattern() {
         const nickname = String(nicknameInput.value);
@@ -212,6 +237,7 @@ export function signUp() {
         const responseBody = response.data;
         const isAvailable = responseBody.available;
 
+        console.log(isAvailable);
         if (!isAvailable) {
             helperTexts['nickname'].textContent = '중복된 닉네임입니다.'
             return false;
@@ -221,18 +247,25 @@ export function signUp() {
         return true;
     }
 
-    // 닉네임 중복 검사 요청 API
-    async function requestNicknameDuplication(nickname) {
-        const respose = await new Api()
-            .post()
-            .url(NICKNAME_DOUBLE_CHECK_URL)
-            .body({
-                nickname: nickname
-            })
-            .request();
+    // 이메일 중복 검증 핸들러
+    async function handleEmailDuplication() {
+        console.log('send api');
+        const email = String(emailInput.value).trim();
 
-        return respose;
+        const response = await requestEmailDuplication(email);
+        const responseBody = response.data;
+        const isAvailable = responseBody.available;
+
+        if (!isAvailable) {
+            helperTexts['email'].textContent = '중복된 이메일입니다.'
+            return false;
+        }
+
+        helperTexts['email'].textContent = ''
+        return true;
     }
+
+
 
     // 비밀번호와 비밀번호 확인 입력이 같은 지 검증
     function handleEqualPasswordInput() {
@@ -286,6 +319,95 @@ export function signUp() {
         return true;
     }
 
+    // 프로필 이미지 첨부 확인 검증 핸들러
+    function handleInvalidProfileImage() {
+        const profileImage = profileImageInput.files[0];
+        if (!profileImage) {
+            helperTexts['profile-image'].textContent = '프로필 사진을 추가해주세요';
+            return false;
+        } else {
+            helperTexts['profile-image'].textContent = '';
+        }
+        return true;
+    }
+
+    // 프로필 이미지 입력 처리 핸들러
+    function handleProfileImageInput() {
+        const file = profileImageInput.files[0];
+        profileImageUploadButton.classList.remove('upload');
+        if (!file) {
+            profileImageUploadButton.innerHTML = '+';
+            helperTexts['profile-image'].textContent = '';
+            return;
+        }
+
+        if (!file.type.startsWith('image/')) {
+            profileImageUploadButton.innerHTML = '+';
+            helperTexts['profile-image'].textContent = '이미지 파일만 업로드 가능합니다.'
+        }
+
+        helperTexts['profile-image'].textContent = '';
+
+        const url = URL.createObjectURL(file);
+        profileImageUploadButton.classList.add('upload');
+        profileImageUploadButton.innerHTML =
+            `
+                <img id="sign-form-preview" src="${url}"/>
+            `;
+    }
+
+    // API 요청 함수
+    // 1. 이메일 중복 검사 요청 API
+    async function requestEmailDuplication(email) {
+        const response = await new Api()
+            .post()
+            .url(EAMIL_DOUBLE_CHECK_URL)
+            .body({
+                email: email
+            })
+            .request();
+
+        return response;
+    }
+
+    // 2. 닉네임 중복 검사 요청 API
+    async function requestNicknameDuplication(nickname) {
+        const respose = await new Api()
+            .post()
+            .url(NICKNAME_DOUBLE_CHECK_URL)
+            .body({
+                nickname: nickname
+            })
+            .request();
+
+        return respose;
+    }
+
+    // 3. 회원가입 API 요청
+    async function requestSignup() {
+        signupButton.disabled = true;
+
+        try {
+            const response = await new Api()
+                .post()
+                .url(SIGNUP_URL)
+                .body({
+                    email: emailInput.value,
+                    password: passwordInput.value,
+                    nickname: nicknameInput.value,
+                    profileImage: profileImageInput.files[0],
+                })
+                .toFormData()
+                .print()
+                .request();
+
+            console.log(response);
+            return response;
+        } finally {
+            activeSignUpButton();
+        }
+    }
+
     // 유틸 함수
     // 1. 이메일 패턴 정규식 검사
     function isEmail(email) {
@@ -296,7 +418,6 @@ export function signUp() {
     function isValidPassword(password) {
         return Boolean(PASSWORD_REGEX.test(password));
     }
-
 
     return root;
 }

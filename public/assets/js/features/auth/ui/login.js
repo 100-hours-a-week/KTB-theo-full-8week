@@ -61,6 +61,7 @@ export function login() {
 
             if (isLoginSuccess) {
                 // TODO: 로그인 성공 시 게시글 목록화면으로 라우팅 처리 필요
+                navigate('/post')
             }
         } catch (error) {
             if (error instanceof ApiError) {

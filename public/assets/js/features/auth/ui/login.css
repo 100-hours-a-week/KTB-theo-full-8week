@@ -2,13 +2,16 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    
+    margin-top: 2%;
 }
 
 .login-wrapper {
     width: 35%;
-    border: 1px solid black;
     box-sizing: border-box;
     padding: 3%;
+    border-radius: 5%;
+    background-color: white;
 }
 
 .login-wrapper > h2 {

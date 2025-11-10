@@ -10,48 +10,72 @@
 </head>
 
 <body>
-    <div class="signup-form-container">
-        <div class="signup-form-wrapper">
-            <h2>회원가입</h2>
-            <form id="signup-form">
-                <div class="signup-field signup-profile-field">
-                    <label class="signup-label" for="signup-form-profile-image">프로필 사진</label>
-                    <p class="signup-form-helper-text">*helper-text</p>
-                    <input id="signup-form-profile-image" type="file" accept="image/*">
-                    <button id="signup-image-upload-btn" type="button">
-                        <img id="preview" src="../public/assets/img/noneProfile.png">
-                    </button>
-                </div>
-                <div class="signup-field">
-                    <label class="signup-label" for="signup-form-email">이메일*</label>
-                    <input id="signup-form-email" name="email" type="email" class="signup-input" required
-                        placeholder="이메일을 입력하세요">
-                    <p class="signup-form-helper-text">*helper-text</p>
-                </div>
-                <div class="signup-field">
-                    <label class="signup-label" for="signup-form-password">비밀번호*</label>
-                    <input id="signup-form-password" name="password" type="password" class="signup-input" required
-                        placeholder="비밀번호를 입력하세요">
-                    <p class="signup-form-helper-text">*helper-text</p>
-                </div>
-                <div class="signup-field">
-                    <label class="signup-label" for="signup-form-password-confirm">비밀번호 확인*</label>
-                    <input id="signup-form-password-confirm" name="password" type="password" class="signup-input"
-                        required placeholder="비밀번호를 한 번 더 입력하세요">
-                    <p class="signup-form-helper-text">*helper-text</p>
-                </div>
-                <div class="signup-field">
-                    <label class="signup-label" for="signup-form-nickname">닉네임*</label>
-                    <input id="signup-form-nickname" name="nickname" type="text" class="signup-input" required
-                        placeholder="닉네임을 입력하세요">
-                    <p class="signup-form-helper-text">*helper-text</p>
-                </div>
-                <button id="signup-btn" type="submit" disabled>회원가입</button>
-            </form>
-            <a id="signup-to-login-link" href="/login">로그인하러 가기</a>
+    <div class="post-card-list-container">
+        <div class="post-card-container">
+            <div class="post-card-wrapper">
+                <button class="post-card-detail-btn">
+                    <div class="post-card-summary-field">
+                        <h2 class="post-card-summary-title">제목 1</h2>
+                        <div class="post-card-summary-info">
+                            <label class="post-card-summary-like">좋아요 0</label>
+                            <label class="post-card-summary-comment">댓글 0</label>
+                            <label class="post-card-summary-viewcount">조회 수 0</label>
+                            <label class="post-card-summary-createdat">2021-01-01 00:00:00</label>
+                        </div>
+                    </div>
+                    <div class="post-card-author-field">
+                        <div class="post-card-author-profile">
+                            <img src="/public/assets/img/noneProfile.png" />
+                        </div>
+                        <div class="post-card-author-nickname">닉네임</div>
+                    </div>
+                </button>
+            </div>
         </div>
-
+        <div class="post-card-container">
+            <div class="post-card-wrapper">
+                <button class="post-card-detail-btn">
+                    <div class="post-card-summary-field">
+                        <h2 class="post-card-summary-title">제목 1</h2>
+                        <div class="post-card-summary-info">
+                            <label class="post-card-summary-like">좋아요 0</label>
+                            <label class="post-card-summary-comment">댓글 0</label>
+                            <label class="post-card-summary-viewcount">조회 수 0</label>
+                            <label class="post-card-summary-createdat">2021-01-01 00:00:00</label>
+                        </div>
+                    </div>
+                    <div class="post-card-author-field">
+                        <div class="post-card-author-profile">
+                            <img src="/public/assets/img/noneProfile.png" />
+                        </div>
+                        <div class="post-card-author-nickname">닉네임</div>
+                    </div>
+                </button>
+            </div>
+        </div>
+        <div class="post-card-container">
+            <div class="post-card-wrapper">
+                <button class="post-card-detail-btn">
+                    <div class="post-card-summary-field">
+                        <h2 class="post-card-summary-title">제목 1</h2>
+                        <div class="post-card-summary-info">
+                            <label class="post-card-summary-like">좋아요 0</label>
+                            <label class="post-card-summary-comment">댓글 0</label>
+                            <label class="post-card-summary-viewcount">조회 수 0</label>
+                            <label class="post-card-summary-createdat">2021-01-01 00:00:00</label>
+                        </div>
+                    </div>
+                    <div class="post-card-author-field">
+                        <div class="post-card-author-profile">
+                            <img src="/public/assets/img/noneProfile.png" />
+                        </div>
+                        <div class="post-card-author-nickname">닉네임</div>
+                    </div>
+                </button>
+            </div>
+        </div>
     </div>
+
 </body>
 
 </html>

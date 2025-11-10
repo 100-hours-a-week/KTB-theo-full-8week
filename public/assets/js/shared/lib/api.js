@@ -44,6 +44,15 @@ export class Api {
         return this;
     }
 
+    toFormData() {
+        const formData = new FormData();
+        const body = Object.entries(this.#body);
+        body.forEach(([key, value]) => {
+            formData.append(key, value);
+        })
+        this.#body = formData;
+        return this;
+    }
     queryString(queryString = {}) {
         this.#queryString = { ...queryString };
         return this;
@@ -75,10 +84,20 @@ export class Api {
             method: this.#method,
             headers: this.#headers,
         }
+
+        // GET 요청은 Body 없이 전송
         if (this.#method === 'GET') {
             return options;
         }
 
+        // FormData는 Content-Type 삭제
+        if (this.#body instanceof FormData) {
+            delete options.headers['Content-Type'];
+            options.body = this.#body;
+            return options;
+        }
+
+        options.headers['Content-Type'] = 'application/json'
         options.body = JSON.stringify(this.#body);
         return options;
 
@@ -105,6 +124,5 @@ export class Api {
 
         // 2XX 응답
         return result;
-
     }
 }
