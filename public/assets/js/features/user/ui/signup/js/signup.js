@@ -1,10 +1,10 @@
-import { activeFeatureCss } from "../../../shared/lib/dom.js";
-import { Api } from "../../../shared/lib/api.js";
-import { apiPath } from "../../../shared/path/apiPath.js";
-import { cssPath } from "../../../shared/path/cssPath.js";
-import { navigate } from "../../../shared/lib/router.js";
-import { ApiError } from "../../../shared/lib/api-error.js";
-import { regex } from "../../../shared/regex/regex.js";
+import { activeFeatureCss } from "../../../../../shared/lib/dom.js";
+import { Api } from "../../../../../shared/lib/api.js";
+import { apiPath } from "../../../../../shared/path/apiPath.js";
+import { cssPath } from "../../../../../shared/path/cssPath.js";
+import { navigate } from "../../../../../shared/lib/router.js";
+import { ApiError } from "../../../../../shared/lib/api-error.js";
+import { regex } from "../../../../../shared/regex/regex.js";
 
 activeFeatureCss(cssPath.SIGNUP_CSS_PATH);
 

@@ -1,9 +1,8 @@
 import { activeCommonCss } from "./lib/dom.js";
-import { canGoBack, goBack } from "./lib/router.js";
+import { cssPath } from "./path/cssPath.js";
+import { goBack } from "./lib/router.js";
 
-const HEADER_CSS_PATH = '/header.css'
-
-activeCommonCss(HEADER_CSS_PATH);
+activeCommonCss(cssPath.COMMON_HEADER_CSS_PATH);
 
 export function commonHeader() {
     const root = document.createElement('div');
@@ -16,15 +15,22 @@ export function commonHeader() {
                 </div>
                 <div class="common-header-center">아무 말 대잔치</div>
                 <div class="common-header-right">
-                    <img id="common-header-userprofile" src="../public/assets/img/noneProfile.png">
+                    <button id="common-header-profile-btn">
+                        <img id="common-header-userprofile" src="../public/assets/img/noneProfile.png">
+                    </button>
                 </div>
             </div>
         </div>`;
 
 
-    const backBtn = root.querySelector('#common-back-btn');
-    backBtn.addEventListener('click', () => {
+    const backButton = root.querySelector('#common-back-btn');
+    backButton.addEventListener('click', () => {
         goBack();
+    })
+
+    const profileButton = root.querySelector('#common-header-profile-btn');
+    profileButton.addEventListener('click', () => {
+        console.log('click');
     })
     return root;
 

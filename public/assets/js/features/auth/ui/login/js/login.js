@@ -1,10 +1,10 @@
-import { activeFeatureCss } from "../../../shared/lib/dom.js";
-import { cssPath } from "../../../shared/path/cssPath.js";
-import { Api } from '../../../shared/lib/api.js';
-import { apiPath } from "../../../shared/path/apiPath.js";
-import { ApiError } from "../../../shared/lib/api-error.js";
-import { navigate } from "../../../shared/lib/router.js";
-import { regex } from "../../../shared/regex/regex.js";
+import { activeFeatureCss } from "../../../../../shared/lib/dom.js";
+import { cssPath } from "../../../../../shared/path/cssPath.js";
+import { Api } from '../../../../../shared/lib/api.js';
+import { apiPath } from "../../../../../shared/path/apiPath.js";
+import { ApiError } from "../../../../../shared/lib/api-error.js";
+import { navigate } from "../../../../../shared/lib/router.js";
+import { regex } from "../../../../../shared/regex/regex.js";
 
 activeFeatureCss(cssPath.LOGIN_CSS_PATH);
 
@@ -51,10 +51,10 @@ export function login() {
             const response = await requestLogin();
             const responseBody = response.data;
             const isLoginSuccess = responseBody.loginSuccess;
-
+            console.log(isLoginSuccess)
             if (isLoginSuccess) {
                 // TODO: 로그인 성공 시 게시글 목록화면으로 라우팅 처리 필요
-                navigate('/post')
+                navigate('/post');
             }
         } catch (error) {
             if (error instanceof ApiError) {

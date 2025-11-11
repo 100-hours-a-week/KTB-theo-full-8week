@@ -1,16 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
+import { activeFeatureCss } from "../../../../../shared/lib/dom.js";
+import { cssPath } from "../../../../../shared/path/cssPath.js";
 
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="test.css">
-    <script src="./test.js"></script>
-    <title>Document</title>
-</head>
+activeFeatureCss(cssPath.MAKE_POST_CSS_PATH);
 
-<body>
-    <div class="make-post-container">
+export function makePost() {
+    const root = document.createElement('div');
+    root.className = 'make-post-container'
+    root.innerHTML =
+        `
         <div class="make-post-wrapper">
             <h2>게시글 작성</h2>
             <form id="make-post-form">
@@ -39,7 +36,6 @@
                 <button id="make-post-btn" type="submit" disabled>완료</button>
             </form>
         </div>
-    </div>
-</body>
-
-</html>
+        `
+    return root;
+}

@@ -1,11 +1,10 @@
-import { activeFeatureCss } from "../../../shared/lib/dom.js";
-import { apiPath } from "../../../shared/path/apiPath.js";
-import { cssPath } from "../../../shared/path/cssPath.js";
+import { activeFeatureCss } from "../../../../../shared/lib/dom.js";
+import { apiPath } from "../../../../../shared/path/apiPath.js";
+import { cssPath } from "../../../../../shared/path/cssPath.js";
 
 activeFeatureCss(cssPath.POST_CARD_CSS_PATH);
 
 export function postCard(post) {
-    console.log(post)
     const { id, title, like, commentCount, hit, createdAt, authorImage, authorNickname } = post;
 
     const root = document.createElement("div");

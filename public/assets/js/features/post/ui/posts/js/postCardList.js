@@ -1,9 +1,10 @@
-import { activeFeatureCss } from "../../../shared/lib/dom.js";
-import { cssPath } from "../../../shared/path/cssPath.js";
-import { Api } from "../../../shared/lib/api.js";
-import { ApiError } from "../../../shared/lib/api-error.js";
+import { activeFeatureCss } from "../../../../../shared/lib/dom.js";
+import { cssPath } from "../../../../../shared/path/cssPath.js";
+import { Api } from "../../../../../shared/lib/api.js";
+import { ApiError } from "../../../../../shared/lib/api-error.js";
 import { postCard } from "./postCard.js";
-import { apiPath } from "../../../shared/path/apiPath.js";
+import { postCardListHeader } from "./postCardListHeader.js";
+import { apiPath } from "../../../../../shared/path/apiPath.js";
 
 activeFeatureCss(cssPath.POST_CARD_LIST_CSS_PATH);
 
@@ -12,14 +13,16 @@ export function postCardList() {
     let currentPage = 0;
     // 페이지당 컨텐츠 개수
     let size = 10;
-    // 다음 페이지 여뷰
+    // 다음 페이지 여부
     let hasNext = true;
     // 페이지 로딩 플래그
     let isLoading = false;
 
 
     const root = document.createElement('div');
-    root.className = 'post-card-list-container'
+    root.className = 'post-card-list-container';
+
+    root.appendChild(postCardListHeader());
 
     // 무한 스크롤용 sentinel 박스 생성
     const sentinel = document.createElement('div');
@@ -30,7 +33,6 @@ export function postCardList() {
     loadNextPage();
 
     return root;
-
 
     // 무한 스크롤용 옵저버 추가
     function addObserver() {
@@ -93,4 +95,6 @@ export function postCardList() {
 
         }
     }
+
+
 }

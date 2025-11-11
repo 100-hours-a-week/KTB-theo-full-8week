@@ -1,0 +1,39 @@
+ .post-card-list-header {
+    text-align: center;
+}
+
+.post-card-title-box {
+    width: 70%;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: stretch;
+
+    margin-bottom: 3%;
+}
+.post-card-list-header p {
+    margin: 0;
+    margin-bottom: 4%;
+
+    font-family: Sandoll GogoRound;
+    font-weight: 400;
+    font-style: 03 Rg;
+    font-size: 1.2rem;
+    line-height: 1.6;
+    letter-spacing: 0%;
+    text-align: center;
+
+}
+
+#post-card-create-btn {
+    align-self: flex-end;
+    width: 30%;
+    
+    border: none;
+    border-radius: 10px;
+    padding: 2% 3%;
+
+    background-color: #ACA0EB;
+    color: white;
+
+    cursor: pointer;
+} 

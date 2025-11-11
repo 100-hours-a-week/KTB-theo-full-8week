@@ -1,6 +1,7 @@
-import { login } from "../../features/auth/ui/login.js"
-import { signup } from "../../features/user/ui/signup.js"
-import { postCardList } from "../../features/post/ui/postCardList.js";
+import { login } from "../../features/auth/ui/login/js/login.js"
+import { signup } from "../../features/user/ui/signup/js/signup.js";
+import { postCardList } from "../../features/post/ui/posts/js/postCardList.js";
+import { makePost } from "../../features/post/ui/makePost/js/makePost.js";
 
 const history = [];
 
@@ -8,7 +9,8 @@ const routes = [
     { path: "/", render: login },
     { path: "/login", render: login },
     { path: "/signup", render: signup },
-    { path: "/post", render: postCardList }
+    { path: "/post", render: postCardList },
+    { path: "/makepost", render: makePost }
 ]
 
 function findRoute(pathname) {
@@ -18,7 +20,6 @@ function findRoute(pathname) {
 export function renderRoute(path) {
     const render = findRoute(path).render;
     const root = document.getElementById("app");
-
     root.innerHTML = '';
     const component = render();
     root.appendChild(component);
@@ -34,7 +35,7 @@ export function canGoBack() {
 }
 
 export function goBack() {
-    if (!canGoBack) {
+    if (!canGoBack()) {
         navigate('/login');
         return;
     }
