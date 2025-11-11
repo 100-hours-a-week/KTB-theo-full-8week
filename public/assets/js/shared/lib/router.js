@@ -2,6 +2,8 @@ import { login } from "../../features/auth/ui/login.js"
 import { signup } from "../../features/user/ui/signup.js"
 import { postCardList } from "../../features/post/ui/postCardList.js";
 
+const history = [];
+
 const routes = [
     { path: "/", render: login },
     { path: "/login", render: login },
@@ -24,4 +26,16 @@ export function renderRoute(path) {
 
 export function navigate(path) {
     renderRoute(path);
+    history.push(path);
+}
+
+export function goBack() {
+    if (history.length == 0) {
+        navigate('/login');
+        return;
+    }
+
+    history.pop();
+    const previousPath = history[history.length - 1];
+    renderRoute(previousPath);
 }

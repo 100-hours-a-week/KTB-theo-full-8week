@@ -34,7 +34,6 @@ export function postCardList() {
     addObserver();
     loadNextPage();
 
-
     return root;
 
 

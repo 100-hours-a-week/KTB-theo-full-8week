@@ -7,7 +7,6 @@ const POST_CARD_CSS_PATH = '/post/ui/postCard.css';
 activeFeatureCss(POST_CARD_CSS_PATH);
 
 export function postCard(post) {
-    console.log('postCard render', post);
     const { id, title, like, commentCount, hit, createdAt, authorNickname } = post;
 
     const root = document.createElement("div");
