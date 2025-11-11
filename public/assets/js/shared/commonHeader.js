@@ -1,5 +1,5 @@
 import { activeCommonCss } from "./lib/dom.js";
-import { goBack } from "./lib/router.js";
+import { canGoBack, goBack } from "./lib/router.js";
 
 const HEADER_CSS_PATH = '/header.css'
 

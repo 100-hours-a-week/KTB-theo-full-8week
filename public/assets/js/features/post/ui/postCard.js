@@ -1,13 +1,11 @@
 import { activeFeatureCss } from "../../../shared/lib/dom.js";
+import { cssPath } from "../../../shared/path/cssPath.js";
 
-
-// CSS Path
-const POST_CARD_CSS_PATH = '/post/ui/postCard.css';
-
-activeFeatureCss(POST_CARD_CSS_PATH);
+activeFeatureCss(cssPath.POST_CARD_CSS_PATH);
 
 export function postCard(post) {
-    const { id, title, like, commentCount, hit, createdAt, authorNickname } = post;
+    console.log(post)
+    const { id, title, like, commentCount, hit, createdAt, authorImage, authorNickname } = post;
 
     const root = document.createElement("div");
     root.className = 'post-card-container';

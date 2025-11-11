@@ -1,7 +1,7 @@
 
 import { ApiError } from "./api-error.js";
+import { apiPath } from "../path/apiPath.js";
 
-const API_SERVER_URL = "http://localhost:8080/";
 export class Api {
     #method = 'GET';
     #url = '';
@@ -72,7 +72,7 @@ export class Api {
         if (!this.#url) {
             throw new Error('URL이 필요합니다.');
         }
-        const url = new URL(this.#url, API_SERVER_URL);
+        const url = new URL(this.#url, apiPath.API_SERVER_URL);
         for (var key in this.#queryString) {
             url.searchParams.append(key, this.#queryString[key]);
         }

@@ -1,16 +1,11 @@
 import { activeFeatureCss } from "../../../shared/lib/dom.js";
+import { cssPath } from "../../../shared/path/cssPath.js";
 import { Api } from "../../../shared/lib/api.js";
 import { ApiError } from "../../../shared/lib/api-error.js";
 import { postCard } from "./postCard.js";
+import { apiPath } from "../../../shared/path/apiPath.js";
 
-
-// CSS Path
-const POST_CARD_LIST_CSS_PATH = '/post/ui/postCardList.css';
-
-// API 요청 URL
-const POST_CARD_LIST_API_URL = '/post';
-
-activeFeatureCss(POST_CARD_LIST_CSS_PATH);
+activeFeatureCss(cssPath.POST_CARD_LIST_CSS_PATH);
 
 export function postCardList() {
     // 현재 페이지
@@ -89,7 +84,7 @@ export function postCardList() {
         try {
             const response = await new Api()
                 .get()
-                .url(POST_CARD_LIST_API_URL)
+                .url(apiPath.POST_CARD_LIST_API_URL)
                 .queryString({ page, size })
                 .request();
 

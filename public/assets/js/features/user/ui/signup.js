@@ -1,22 +1,12 @@
 import { activeFeatureCss } from "../../../shared/lib/dom.js";
 import { Api } from "../../../shared/lib/api.js";
+import { apiPath } from "../../../shared/path/apiPath.js";
+import { cssPath } from "../../../shared/path/cssPath.js";
 import { navigate } from "../../../shared/lib/router.js";
 import { ApiError } from "../../../shared/lib/api-error.js";
+import { regex } from "../../../shared/regex/regex.js";
 
-// CSS Path
-const SIGNUP_CSS_PATH = '/user/ui/signup.css'
-
-// 유틸 정규 표현식
-const EMAIL_REGEX = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,}$/i;
-const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9])\S{8,20}$/;
-
-
-// API 요청 URL
-const NICKNAME_DOUBLE_CHECK_URL = '/user/nickname/double-check';
-const EAMIL_DOUBLE_CHECK_URL = '/user/email/double-check';
-const SIGNUP_URL = '/user'
-
-activeFeatureCss(SIGNUP_CSS_PATH);
+activeFeatureCss(cssPath.SIGNUP_CSS_PATH);
 
 export function signup() {
     const root = document.createElement('div');
@@ -361,7 +351,7 @@ export function signup() {
     async function requestEmailDuplication(email) {
         const response = await new Api()
             .post()
-            .url(EAMIL_DOUBLE_CHECK_URL)
+            .url(apiPath.EAMIL_DOUBLE_CHECK_URL)
             .body({
                 email: email
             })
@@ -374,7 +364,7 @@ export function signup() {
     async function requestNicknameDuplication(nickname) {
         const respose = await new Api()
             .post()
-            .url(NICKNAME_DOUBLE_CHECK_URL)
+            .url(apiPath.NICKNAME_DOUBLE_CHECK_URL)
             .body({
                 nickname: nickname
             })
@@ -390,7 +380,7 @@ export function signup() {
         try {
             const response = await new Api()
                 .post()
-                .url(SIGNUP_URL)
+                .url(apiPath.SIGNUP_URL)
                 .body({
                     email: emailInput.value,
                     password: passwordInput.value,
@@ -411,12 +401,12 @@ export function signup() {
     // 유틸 함수
     // 1. 이메일 패턴 정규식 검사
     function isEmail(email) {
-        return Boolean(EMAIL_REGEX.test(email));
+        return Boolean(regex.EMAIL.test(email));
     }
 
     // 2. 패스워드 패턴 정규식 검사
     function isValidPassword(password) {
-        return Boolean(PASSWORD_REGEX.test(password));
+        return Boolean(regex.PASSWORD.test(password));
     }
 
     return root;

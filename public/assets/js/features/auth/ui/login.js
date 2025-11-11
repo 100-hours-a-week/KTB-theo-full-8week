@@ -1,19 +1,12 @@
 import { activeFeatureCss } from "../../../shared/lib/dom.js";
+import { cssPath } from "../../../shared/path/cssPath.js";
 import { Api } from '../../../shared/lib/api.js';
+import { apiPath } from "../../../shared/path/apiPath.js";
 import { ApiError } from "../../../shared/lib/api-error.js";
 import { navigate } from "../../../shared/lib/router.js";
+import { regex } from "../../../shared/regex/regex.js";
 
-// CSS Path
-const LOGIN_CSS_PATH = '/auth/ui/login.css';
-
-// 유틸 정규 표현식
-const EMAIL_REGEX = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,}$/i;
-const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9])\S{8,20}$/;
-
-// API 요청 URL
-const LOGIN_API_URL = '/auth/access/token';
-
-activeFeatureCss(LOGIN_CSS_PATH);
+activeFeatureCss(cssPath.LOGIN_CSS_PATH);
 
 export function login() {
     const root = document.createElement("div");
@@ -97,7 +90,7 @@ export function login() {
         try {
             const response = await new Api()
                 .post()
-                .url(LOGIN_API_URL)
+                .url(apiPath.LOGIN_API_URL)
                 .body({
                     email: emailInput.value,
                     password: passwordInput.value
@@ -166,12 +159,12 @@ export function login() {
     // 유틸 함수
     // 1. 이메일 패턴 정규식 검사
     function isEmail(email) {
-        return Boolean(EMAIL_REGEX.test(email));
+        return Boolean(regex.EMAIL.test(email));
     }
 
     // 2. 패스워드 패턴 정규식 검사
     function isValidPassword(password) {
-        return Boolean(PASSWORD_REGEX.test(password));
+        return Boolean(regex.PASSWORD.test(password));
     }
 
     return root;

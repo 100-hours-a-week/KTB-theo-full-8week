@@ -29,8 +29,12 @@ export function navigate(path) {
     history.push(path);
 }
 
+export function canGoBack() {
+    return history.length > 1;
+}
+
 export function goBack() {
-    if (history.length == 0) {
+    if (!canGoBack) {
         navigate('/login');
         return;
     }

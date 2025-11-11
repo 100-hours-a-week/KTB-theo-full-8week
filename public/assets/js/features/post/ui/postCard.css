@@ -59,8 +59,8 @@
 }
 
 .post-card-author-profile img {
-    width: 100%;
-    height: 100%;
+    width: 10%;
+    aspect-ratio: 1 / 1;
     object-fit: cover;
 }
 
