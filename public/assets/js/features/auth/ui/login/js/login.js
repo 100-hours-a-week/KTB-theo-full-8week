@@ -44,24 +44,7 @@ export function login() {
     // 1. 로그인 폼 태그 이벤트 등록
     form.addEventListener('submit', async (event) => {
         event.preventDefault();
-
-        if (loginButton.disabled) return;
-
-        try {
-            const response = await requestLogin();
-            const responseBody = response.data;
-            const isLoginSuccess = responseBody.loginSuccess;
-            console.log(isLoginSuccess)
-            if (isLoginSuccess) {
-                // TODO: 로그인 성공 시 게시글 목록화면으로 라우팅 처리 필요
-                navigate('/post');
-            }
-        } catch (error) {
-            if (error instanceof ApiError) {
-                handleLoginFail(error);
-            }
-        }
-
+        await handleLoginRequest();
     })
 
     // 2. 이메일 이벤트 등록
@@ -153,6 +136,28 @@ export function login() {
         } else {
             helperText.textContent = '';
         };
+    }
+
+    // 5. 로그인 요청
+    async function handleLoginRequest() {
+        if (loginButton.disabled) return;
+
+        try {
+            const response = await requestLogin();
+            const responseBody = response.data;
+            const isLoginSuccess = responseBody.loginSuccess;
+            console.log(isLoginSuccess)
+            if (isLoginSuccess) {
+                // TODO: 로그인 성공 시 게시글 목록화면으로 라우팅 처리 필요
+                navigate('/post');
+            } else {
+                helperText.textContent = '로그인 정보가 맞지 않습니다.';
+            }
+        } catch (error) {
+            if (error instanceof ApiError) {
+                handleLoginFail(error);
+            }
+        }
     }
 
 
