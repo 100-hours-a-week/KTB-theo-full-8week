@@ -1,4 +1,5 @@
 import { activeFeatureCss } from "../../../shared/lib/dom.js";
+import { apiPath } from "../../../shared/path/apiPath.js";
 import { cssPath } from "../../../shared/path/cssPath.js";
 
 activeFeatureCss(cssPath.POST_CARD_CSS_PATH);
@@ -24,7 +25,9 @@ export function postCard(post) {
                     </div>
                 </div>
                 <div class="post-card-author-field">
-                    <div class="post-card-author-profile"></div>
+                    <div class="post-card-author-profile">
+                        <img ${authorImage ? `src="${apiPath.API_SERVER_URL + authorImage}"` : ''}>
+                    </div>
                     <div class="post-card-author-nickname">${authorNickname}</div>
                 </div>
             </button>

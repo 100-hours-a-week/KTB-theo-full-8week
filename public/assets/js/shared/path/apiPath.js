@@ -1,5 +1,5 @@
 export const apiPath = {
-    API_SERVER_URL: 'http://localhost:8080/',
+    API_SERVER_URL: 'http://localhost:8080',
 
     // Auth
     LOGIN_API_URL: '/auth/access/token',
