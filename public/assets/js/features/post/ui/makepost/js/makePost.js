@@ -1,5 +1,8 @@
 import { activeFeatureCss } from "../../../../../shared/lib/dom.js";
 import { cssPath } from "../../../../../shared/path/cssPath.js";
+import { isBlank, isOverMaxLength } from "../../../../../shared/lib/util/util.js";
+import { Api } from "../../../../../shared/lib/api.js";
+import { apiPath } from "../../../../../shared/path/apiPath.js";
 
 activeFeatureCss(cssPath.MAKE_POST_CSS_PATH);
 
@@ -20,7 +23,7 @@ export function makePost() {
                     <label class="make-post-label">내용*</label>
                     <textarea id="make-post-form-article" type="" name="article" class="make-post-input" required
                         placeholder="내용을 입력해주세요"></textarea>
-                    <p id="make-post-form-helper-text">*helper text</p>
+                    <p id="make-post-form-helper-text"></p>
                 </div>
                 <div class="make-post-field">
                     <label class="make-post-label">이미지</label>
@@ -37,5 +40,87 @@ export function makePost() {
             </form>
         </div>
         `
+
+
+    const form = root.querySelector('#make-post-form');
+    const titleInput = root.querySelector('#make-post-form-title');
+    const articleInput = root.querySelector('#make-post-form-article');
+    const articleImageInput = root.querySelector('#make-post-form-article-image');
+    const helperText = root.querySelector('#make-post-form-helper-text');
+    const makePostButton = root.querySelector('#make-post-btn');
+
+    // 이벤트 리스너 등록
+    // 1. 게시글 제목 Input 태그 이벤트 등록
+    titleInput.addEventListener('input', () => {
+        handleTitleLength();
+        handleTitleAndArticleBlank();
+        activeMakePostButton();
+    })
+
+    // 2. 게시글 본문 textarea 태그 이벤트 등록
+    articleInput.addEventListener('input', () => {
+        handleTitleAndArticleBlank();
+        activeMakePostButton();
+    })
+
+    // 3. 게시글 생성 form 이벤트 등록
+    form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        console.log('submit');
+    })
+
+    async function requestMakePost() {
+        makePostButton.disabled = true;
+
+        try {
+            let request = await new Api()
+                .post()
+                .url(apiPath.MAKE_POST_API_URL);
+
+            if (articleImageInput.files[0]) {
+
+            }
+        } finally {
+            activeMakePostButton();
+        }
+    }
+    // 이벤트 리스너 콜백 함수
+    // 1. 게시글 등록 버튼 활성화 핸들러
+    function activeMakePostButton() {
+        const title = String(titleInput.value).trim();
+        const article = String(articleInput.value).trim();
+        const isFilled = !isBlank(title) && !isBlank(article);
+
+        if (!isFilled) {
+            makePostButton.classList.remove('active');
+            makePostButton.disabled = true;
+            return;
+        }
+
+        const canActive = !isOverMaxLength(title, 26) && isFilled;
+        makePostButton.classList.toggle('active', canActive);
+        makePostButton.disabled = !canActive;
+    }
+
+    // 2. 게시글 제목, 본문 내용 작성 여부 확인 핸들러
+    function handleTitleAndArticleBlank() {
+        const title = String(titleInput.value).trim();
+        const article = String(articleInput.value).trim();
+        if (isBlank(title) && isBlank(article)) {
+            helperText.textContent = '제목, 내용을 모두 작성해주세요';
+            return;
+        }
+    }
+
+    // 3. 게시글 제목 길이 확인 핸들러
+    function handleTitleLength() {
+        const title = String(titleInput.value).trim();
+        if (isOverMaxLength(title, 26)) {
+            helperText.textContent = '제목은 최대 26자 입니다.';
+            return;
+        } else {
+            helperText.textContent = '';
+        }
+    }
     return root;
 }

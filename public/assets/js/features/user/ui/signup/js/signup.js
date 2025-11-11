@@ -4,7 +4,7 @@ import { apiPath } from "../../../../../shared/path/apiPath.js";
 import { cssPath } from "../../../../../shared/path/cssPath.js";
 import { navigate } from "../../../../../shared/lib/router.js";
 import { ApiError } from "../../../../../shared/lib/api-error.js";
-import { regex } from "../../../../../shared/regex/regex.js";
+import { isEmail, isValidPasswordPattern, isBetweenLength, isBlank, isOverMaxLength } from "../../../../../shared/lib/util/util.js";
 
 activeFeatureCss(cssPath.SIGNUP_CSS_PATH);
 
@@ -82,18 +82,7 @@ export function signup() {
     // 회원가입 폼 이벤트 등록
     form.addEventListener('submit', async (event) => {
         event.preventDefault();
-        console.log("disabled", signupButton.disabled);
-        if (signupButton.disabled) return;
-
-        try {
-            const response = await requestSignup();
-            const responseBody = response.data;
-            console.log(responseBody);
-        } catch (error) {
-            if (error instanceof ApiError) {
-                // handleSignupFail(error);
-            }
-        }
+        handleSignupRequest();
     })
 
     // 회원 프로필 이미지 업로드 버튼 이벤트 등록
@@ -199,13 +188,13 @@ export function signup() {
 
     // 닉네임 유효성 검증 핸들러
     function handleInvalidNicknamePattern() {
-        const nickname = String(nicknameInput.value);
+        const nickname = String(nicknameInput.value).trim();
 
-        if (!nickname) {
+        if (isBlank(nickname)) {
             helperTexts['nickname'].textContent = '닉네임을 입력해주세요'
             return false;
         }
-        if (nickname.trim().length > 10) {
+        if (isOverMaxLength(nickname, 10)) {
             helperTexts['nickname'].textContent = '닉네임을 최대 10자까지 작성 가능합니다.'
             return false;
         }
@@ -220,14 +209,12 @@ export function signup() {
 
     // 닉네임 중복 검증 핸들러
     async function handleNicknameDuplication() {
-        console.log("send api")
         const nickname = String(nicknameInput.value).trim();
 
         const response = await requestNicknameDuplication(nickname);
         const responseBody = response.data;
         const isAvailable = responseBody.available;
 
-        console.log(isAvailable);
         if (!isAvailable) {
             helperTexts['nickname'].textContent = '중복된 닉네임입니다.'
             return false;
@@ -239,7 +226,6 @@ export function signup() {
 
     // 이메일 중복 검증 핸들러
     async function handleEmailDuplication() {
-        console.log('send api');
         const email = String(emailInput.value).trim();
 
         const response = await requestEmailDuplication(email);
@@ -262,7 +248,7 @@ export function signup() {
         const password = String(passwordInput.value).trim();
         const passwordConfirm = String(passwordConfirmInput.value).trim();
 
-        if (!passwordConfirm) {
+        if (isBlank(passwordConfirm)) {
             helperTexts['password-confirm'].textContent = '비밀번호를 한 번 더 입력해주세요.'
             return false;
         }
@@ -278,12 +264,12 @@ export function signup() {
 
     // 이메일 유효성 검증 핸들러
     function handleInvalidEmail() {
-        const email = String(emailInput.value);
-        if (!email) {
+        const email = String(emailInput.value).trim();
+        if (isBlank(email)) {
             helperTexts['email'].textContent = '이메일을 입력해주세요';
             return false;
         }
-        if (!isEmail(email.trim())) {
+        if (!isEmail(email)) {
             helperTexts['email'].innerHTML = '올바른 이메일 주소 형식을 입력해주세요. example@example.com'
             return false;
         } else {
@@ -294,12 +280,12 @@ export function signup() {
 
     // 패스워드 유효성 검증 핸들러
     function handleInvalidPassword() {
-        const password = String(passwordInput.value);
-        if (!password) {
+        const password = String(passwordInput.value).trim();
+        if (isBlank(password)) {
             helperTexts['password'].textContent = '비밀번호를 입력해주세요';
             return false;
         }
-        if (!isValidPassword(password.trim())) {
+        if (!isValidPasswordPattern(password) || !isBetweenLength(password, 8, 20)) {
             helperTexts['password'].textContent = '비밀번호는 8자 이상, 20자 이하이며, 대문자, 소문자, 특수문자를 각각 최소 1개 포함해야 합니다.';
             return false;
         } else {
@@ -344,6 +330,19 @@ export function signup() {
             `
                 <img id="sign-form-preview" src="${url}"/>
             `;
+    }
+    // 회원가입 요청 핸들러
+    async function handleSignupRequest() {
+        if (signupButton.disabled) return;
+
+        try {
+            const response = await requestSignup();
+            const responseBody = response.data;
+        } catch (error) {
+            if (error instanceof ApiError) {
+                // handleSignupFail(error);
+            }
+        }
     }
 
     // API 요청 함수
@@ -397,17 +396,5 @@ export function signup() {
             activeSignUpButton();
         }
     }
-
-    // 유틸 함수
-    // 1. 이메일 패턴 정규식 검사
-    function isEmail(email) {
-        return Boolean(regex.EMAIL.test(email));
-    }
-
-    // 2. 패스워드 패턴 정규식 검사
-    function isValidPassword(password) {
-        return Boolean(regex.PASSWORD.test(password));
-    }
-
     return root;
 }

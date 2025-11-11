@@ -10,6 +10,7 @@ export const apiPath = {
     NICKNAME_DOUBLE_CHECK_URL: '/user/nickname/double-check',
 
     //Post
-    POST_CARD_LIST_API_URL: '/post'
+    POST_CARD_LIST_API_URL: '/post',
+    MAKE_POST_API_URL: '/post',
 }
 Object.freeze(apiPath); // ENUM;

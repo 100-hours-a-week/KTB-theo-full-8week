@@ -4,7 +4,7 @@ import { Api } from '../../../../../shared/lib/api.js';
 import { apiPath } from "../../../../../shared/path/apiPath.js";
 import { ApiError } from "../../../../../shared/lib/api-error.js";
 import { navigate } from "../../../../../shared/lib/router.js";
-import { regex } from "../../../../../shared/regex/regex.js";
+import { isEmail, isValidPasswordPattern, isBlank, isBetweenLength } from "../../../../../shared/lib/util/util.js";
 
 activeFeatureCss(cssPath.LOGIN_CSS_PATH);
 
@@ -42,9 +42,9 @@ export function login() {
 
     // 이벤트 리스너 등록
     // 1. 로그인 폼 태그 이벤트 등록
-    form.addEventListener('submit', async (event) => {
+    form.addEventListener('submit', (event) => {
         event.preventDefault();
-        await handleLoginRequest();
+        handleLoginRequest();
     })
 
     // 2. 이메일 이벤트 등록
@@ -64,6 +64,84 @@ export function login() {
         event.preventDefault();
         navigate('/signup');
     })
+
+
+
+
+    // 이벤트 리스너 콜백 함수
+    // 1. 로그인 실패 핸들러
+    function handleLoginFail(error) {
+        helperText.textContent = error.message;
+    }
+
+    // 2. 로그인 버튼 활성화 검사 함수
+    function activeLoginButton() {
+        const email = String(emailInput.value).trim();
+        const password = String(passwordInput.value).trim();
+        const isFilled = !isBlank(email) && !isBlank(password);
+
+        if (!isFilled) {
+            loginButton.classList.remove('active');
+            loginButton.disabled = true;
+            return;
+        }
+
+        const canActive = isEmail(email) || isValidPasswordPattern(password)
+            && isBetweenLength(password, 8, 20);
+        loginButton.classList.toggle('active', canActive);
+        loginButton.disabled = !canActive;
+    }
+
+    // 3. 이메일 유효성 검증 핸들러
+    function handleInvalidEmail() {
+        const email = String(emailInput.value).trim();
+        if (isBlank(email)) {
+            helperText.textContent = '이메일을 입력해주세요';
+            return;
+        }
+        if (!isEmail(email)) {
+            helperText.textContent = '올바른 이메일 주소 형식을 입력해주세요. example@example.com';
+            return;
+        }
+        helperText.textContent = '';
+    }
+
+    // 4. 패스워드 유효성 검증 핸들러
+    function handleInvalidPassword() {
+        const password = String(passwordInput.value).trim();
+        if (isBlank(password)) {
+            helperText.textContent = '비밀번호를 입력해주세요';
+            return;
+        }
+        if (!isValidPasswordPattern(password) || !isBetweenLength(password, 8, 20)) {
+            helperText.textContent = '비밀번호는 8자 이상, 20자 이하이며, 대문자, 소문자, 특수문자를 각각 최소 1개 포함해야 합니다.';
+            return;
+        }
+
+        helperText.textContent = '';
+    }
+
+    // 5. 로그인 요청
+    async function handleLoginRequest() {
+        if (loginButton.disabled) return;
+
+        try {
+            const response = await requestLogin();
+            const responseBody = response.data;
+            const isLoginSuccess = responseBody.loginSuccess;
+
+            if (isLoginSuccess) {
+                // TODO: 로그인 성공 시 게시글 목록화면으로 라우팅 처리 필요
+                navigate('/post');
+            } else {
+                helperText.textContent = '로그인 정보가 맞지 않습니다.';
+            }
+        } catch (error) {
+            if (error instanceof ApiError) {
+                handleLoginFail(error);
+            }
+        }
+    }
 
     // API 요청 함수
     // 1. 로그인 API 요청
@@ -85,92 +163,5 @@ export function login() {
             activeLoginButton();
         }
     }
-
-
-    // 이벤트 리스너 콜백 함수
-    // 1. 로그인 실패 핸들러
-    function handleLoginFail(error) {
-        helperText.textContent = error.message;
-    }
-
-    // 2. 로그인 버튼 활성화 검사 함수
-    function activeLoginButton() {
-        const email = String(emailInput.value).trim();
-        const password = String(passwordInput.value).trim();
-        const isFilled = email && password;
-
-        if (!isFilled) {
-            loginButton.classList.remove('active');
-            loginButton.disabled = true;
-            return;
-        }
-
-        const canActive = isEmail(email) && isValidPassword(password);
-        loginButton.classList.toggle('active', canActive);
-        loginButton.disabled = !canActive;
-    }
-
-    // 3. 이메일 유효성 검증 핸들러
-    function handleInvalidEmail() {
-        const email = String(emailInput.value);
-        if (!email) {
-            helperText.textContent = '이메일을 입력해주세요';
-            return;
-        }
-        if (!isEmail(email.trim())) {
-            helperText.textContent = '올바른 이메일 주소 형식을 입력해주세요. example@example.com';
-        } else {
-            helperText.textContent = '';
-        }
-    }
-
-    // 4. 패스워드 유효성 검증 핸들러
-    function handleInvalidPassword() {
-        const password = String(passwordInput.value);
-        if (!password) {
-            helperText.textContent = '비밀번호를 입력해주세요';
-            return;
-        }
-        if (!isValidPassword(password.trim())) {
-            helperText.textContent = '비밀번호는 8자 이상, 20자 이하이며, 대문자, 소문자, 특수문자를 각각 최소 1개 포함해야 합니다.';
-        } else {
-            helperText.textContent = '';
-        };
-    }
-
-    // 5. 로그인 요청
-    async function handleLoginRequest() {
-        if (loginButton.disabled) return;
-
-        try {
-            const response = await requestLogin();
-            const responseBody = response.data;
-            const isLoginSuccess = responseBody.loginSuccess;
-            console.log(isLoginSuccess)
-            if (isLoginSuccess) {
-                // TODO: 로그인 성공 시 게시글 목록화면으로 라우팅 처리 필요
-                navigate('/post');
-            } else {
-                helperText.textContent = '로그인 정보가 맞지 않습니다.';
-            }
-        } catch (error) {
-            if (error instanceof ApiError) {
-                handleLoginFail(error);
-            }
-        }
-    }
-
-
-    // 유틸 함수
-    // 1. 이메일 패턴 정규식 검사
-    function isEmail(email) {
-        return Boolean(regex.EMAIL.test(email));
-    }
-
-    // 2. 패스워드 패턴 정규식 검사
-    function isValidPassword(password) {
-        return Boolean(regex.PASSWORD.test(password));
-    }
-
     return root;
 }
