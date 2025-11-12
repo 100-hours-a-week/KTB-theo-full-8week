@@ -34,34 +34,42 @@ export function commonHeader() {
     const backButton = root.querySelector('#common-back-btn');
     const profileButton = root.querySelector('#common-header-profile-btn');
 
+    // 돌아가기 버튼 이벤트 등록
     backButton.addEventListener('click', () => {
         goBack();
     })
 
-
+    // 프로필 이미지 버튼 이벤트 등록
     profileButton.addEventListener('click', (event) => {
         event.stopPropagation();
         toggleProfileMenu();
     })
 
+    // 드롭다운 메뉴 클릭 이벤트 등록
     menu.addEventListener('click', (event) => {
         const action = event.target.dataset.action;
         doButtonAction(action);
     })
 
+    // 전체 화면 클릭 이벤트 등록
     document.addEventListener('click', (event) => {
         if (!root.contains(event.target)) {
             menu.hidden = true;
         }
     })
+
+    // 드롭다운 메뉴 토들 핸들러
     function toggleProfileMenu() {
         const open = menu.hidden;
         menu.hidden = !open;
     }
 
+    // 드롭다운 메뉴 닫기 핸들러
     function closeMenu() {
         menu.hidden = true;
     }
+
+    // 드롭다운 메뉴 선택시 액션 핸들러
     function doButtonAction(action) {
         if (!action) {
             return;
