@@ -1,6 +1,8 @@
 import { activeCommonCss } from "./lib/dom.js";
 import { cssPath } from "./path/cssPath.js";
+import { apiPath } from "./path/apiPath.js";
 import { goBack, navigate } from "./lib/router.js";
+import { eventBus } from "./lib/eventBus.js";
 
 activeCommonCss(cssPath.COMMON_HEADER_CSS_PATH);
 
@@ -17,9 +19,10 @@ export function commonHeader() {
                 <div class="common-header-right">
                     <div class="profile-trigger">
                         <button id="common-header-profile-btn">
-                            <img id="common-header-userprofile" src="../public/assets/img/noneProfile.png">
+                            <img id="common-header-userprofile" 
+                            src="${apiPath.API_SERVER_URL + localStorage.getItem('profileImageUrl')}">
                         </button>
-                        <div class="common-header-profile-menu">
+                        <div class="common-header-profile-menu" hidden>
                             <button class="header-profile-menu-btn" data-action="edit-profile">회원정보 수정</button>
                             <button class="header-profile-menu-btn" data-action="edit-password">비밀번호 수정</button>
                             <button class="header-profile-menu-btn"  data-action="logout">로그아웃</button>
@@ -30,9 +33,10 @@ export function commonHeader() {
         </div>`;
 
     const menu = root.querySelector('.common-header-profile-menu');
-    const menuButton = root.querySelectorAll('.header-profile-menu-btn');
     const backButton = root.querySelector('#common-back-btn');
     const profileButton = root.querySelector('#common-header-profile-btn');
+    const profileImage = root.querySelector('#common-header-userprofile');
+
 
     // 돌아가기 버튼 이벤트 등록
     backButton.addEventListener('click', () => {
@@ -57,6 +61,13 @@ export function commonHeader() {
             menu.hidden = true;
         }
     })
+
+    // 로그인 시 프로필 이미지 변경 커스텀 이벤트 등록
+    eventBus.addEventListener('user:login', (event, options) => {
+        console.log('event occur');
+        profileImage.src = apiPath.API_SERVER_URL + localStorage.getItem('profileImageUrl');
+    })
+
 
     // 드롭다운 메뉴 토들 핸들러
     function toggleProfileMenu() {
