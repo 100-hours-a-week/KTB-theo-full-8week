@@ -80,28 +80,10 @@ export function makePost() {
         handleMakePostRequest();
     })
 
-    async function handleMakePostRequest() {
-        if (makePostButton.disabled) return;
 
 
-        try {
-            const response = await requestMakePost();
-            const responseBody = response.data;
-            alert('게시글 생성 성공!');
-            navigate('/post');
-
-        } catch (error) {
-            if (error instanceof ApiError) {
-                handleMakePostFail(error);
-            }
-        } finally {
-            activeMakePostButton();
-        }
-    }
-    function handleMakePostFail(error) {
-        helperText.textContent = error.message;
-    }
-
+    // API 요청 함수
+    // 1. 게시글 생성 요청
     async function requestMakePost() {
         makePostButton.disabled = true;
 
@@ -168,10 +150,36 @@ export function makePost() {
     }
     return root;
 
+    // 4. 게시글 본문 이미지 제목 표시 핸들러
     function handleArticleImageTitleText() {
         const articleImage = articleImageInput.files[0];
         console.log(articleImage.name);
         console.log(articleImageTitleText);
         articleImageTitleText.textContent = articleImage.name;
+    }
+
+    // 5. 게시글 생성 요청 핸들러
+    async function handleMakePostRequest() {
+        if (makePostButton.disabled) return;
+
+
+        try {
+            const response = await requestMakePost();
+            const responseBody = response.data;
+            alert('게시글 생성 성공!');
+            navigate('/post');
+
+        } catch (error) {
+            if (error instanceof ApiError) {
+                handleMakePostFail(error);
+            }
+        } finally {
+            activeMakePostButton();
+        }
+    }
+
+    // 6. 게시글 생성 실패 핸들러
+    function handleMakePostFail(error) {
+        helperText.textContent = error.message;
     }
 }
