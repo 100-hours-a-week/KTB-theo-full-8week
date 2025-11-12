@@ -3,6 +3,8 @@ import { cssPath } from "../../../../../shared/path/cssPath.js";
 import { isBlank, isOverMaxLength } from "../../../../../shared/lib/util/util.js";
 import { Api } from "../../../../../shared/lib/api.js";
 import { apiPath } from "../../../../../shared/path/apiPath.js";
+import { ApiError } from "../../../../../shared/lib/api-error.js";
+import { navigate } from "../../../../../shared/lib/router.js";
 
 activeFeatureCss(cssPath.MAKE_POST_CSS_PATH);
 
@@ -21,7 +23,7 @@ export function makePost() {
                 </div>
                 <div class="make-post-field">
                     <label class="make-post-label">내용*</label>
-                    <textarea id="make-post-form-article" type="" name="article" class="make-post-input" required
+                    <textarea id="make-post-form-article" name="article" class="make-post-input" required
                         placeholder="내용을 입력해주세요"></textarea>
                     <p id="make-post-form-helper-text"></p>
                 </div>
@@ -46,6 +48,7 @@ export function makePost() {
     const titleInput = root.querySelector('#make-post-form-title');
     const articleInput = root.querySelector('#make-post-form-article');
     const articleImageInput = root.querySelector('#make-post-form-article-image');
+    const articleImageTitleText = root.querySelector('.make-post-file-text');
     const helperText = root.querySelector('#make-post-form-helper-text');
     const makePostButton = root.querySelector('#make-post-btn');
 
@@ -57,33 +60,74 @@ export function makePost() {
         activeMakePostButton();
     })
 
+    // 2. 게시글 이미지 Input태그 이벤트 등록
+    articleImageInput.addEventListener('change', () => {
+        console.log('input');
+        handleArticleImageTitleText();
+    })
+
     // 2. 게시글 본문 textarea 태그 이벤트 등록
     articleInput.addEventListener('input', () => {
         handleTitleAndArticleBlank();
         activeMakePostButton();
     })
 
+
     // 3. 게시글 생성 form 이벤트 등록
     form.addEventListener('submit', (event) => {
         event.preventDefault();
         console.log('submit');
+        handleMakePostRequest();
     })
 
-    async function requestMakePost() {
-        makePostButton.disabled = true;
+    async function handleMakePostRequest() {
+        if (makePostButton.disabled) return;
+
 
         try {
-            let request = await new Api()
-                .post()
-                .url(apiPath.MAKE_POST_API_URL);
+            const response = await requestMakePost();
+            const responseBody = response.data;
+            alert('게시글 생성 성공!');
+            navigate('/post');
 
-            if (articleImageInput.files[0]) {
-
+        } catch (error) {
+            if (error instanceof ApiError) {
+                handleMakePostFail(error);
             }
         } finally {
             activeMakePostButton();
         }
     }
+    function handleMakePostFail(error) {
+        helperText.textContent = error.message;
+    }
+
+    async function requestMakePost() {
+        makePostButton.disabled = true;
+
+        const authorId = localStorage.getItem('currentUserId');
+
+        let body = {
+            authorId: authorId,
+            title: titleInput.value,
+            article: articleInput.value,
+            category: "COMMUNITY"
+        }
+
+        if (articleImageInput.files && articleImageInput.files.length > 0) {
+            body = { ...body, articleImage: articleImageInput.files[0] }
+        }
+
+        const response = await new Api()
+            .post()
+            .url(apiPath.MAKE_POST_API_URL)
+            .body(body)
+            .toFormData()
+            .request();
+
+        return response;
+    }
+
     // 이벤트 리스너 콜백 함수
     // 1. 게시글 등록 버튼 활성화 핸들러
     function activeMakePostButton() {
@@ -123,4 +167,11 @@ export function makePost() {
         }
     }
     return root;
+
+    function handleArticleImageTitleText() {
+        const articleImage = articleImageInput.files[0];
+        console.log(articleImage.name);
+        console.log(articleImageTitleText);
+        articleImageTitleText.textContent = articleImage.name;
+    }
 }

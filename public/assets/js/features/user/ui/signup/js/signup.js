@@ -80,7 +80,7 @@ export function signup() {
     let isAvailableEmail = false;
 
     // 회원가입 폼 이벤트 등록
-    form.addEventListener('submit', async (event) => {
+    form.addEventListener('submit', (event) => {
         event.preventDefault();
         handleSignupRequest();
     })
@@ -338,10 +338,14 @@ export function signup() {
         try {
             const response = await requestSignup();
             const responseBody = response.data;
+            alert('회원가입 성공')
+            navigate('/login');
         } catch (error) {
             if (error instanceof ApiError) {
                 // handleSignupFail(error);
             }
+        } finally {
+            activeSignUpButton();
         }
     }
 
@@ -376,25 +380,20 @@ export function signup() {
     async function requestSignup() {
         signupButton.disabled = true;
 
-        try {
-            const response = await new Api()
-                .post()
-                .url(apiPath.SIGNUP_URL)
-                .body({
-                    email: emailInput.value,
-                    password: passwordInput.value,
-                    nickname: nicknameInput.value,
-                    profileImage: profileImageInput.files[0],
-                })
-                .toFormData()
-                .print()
-                .request();
+        const response = await new Api()
+            .post()
+            .url(apiPath.SIGNUP_URL)
+            .body({
+                email: emailInput.value,
+                password: passwordInput.value,
+                nickname: nicknameInput.value,
+                profileImage: profileImageInput.files[0],
+            })
+            .toFormData()
+            .print()
+            .request();
 
-            console.log(response);
-            return response;
-        } finally {
-            activeSignUpButton();
-        }
+        return response;
     }
     return root;
 }

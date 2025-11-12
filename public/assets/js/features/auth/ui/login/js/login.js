@@ -66,15 +66,13 @@ export function login() {
     })
 
 
-
-
     // 이벤트 리스너 콜백 함수
     // 1. 로그인 실패 핸들러
     function handleLoginFail(error) {
         helperText.textContent = error.message;
     }
 
-    // 2. 로그인 버튼 활성화 검사 함수
+    // 2. 로그인 버튼 활성화 검사 핸들러
     function activeLoginButton() {
         const email = String(emailInput.value).trim();
         const password = String(passwordInput.value).trim();
@@ -132,6 +130,7 @@ export function login() {
 
             if (isLoginSuccess) {
                 // TODO: 로그인 성공 시 게시글 목록화면으로 라우팅 처리 필요
+                localStorage.setItem('currentUserId', responseBody.id);
                 navigate('/post');
             } else {
                 helperText.textContent = '로그인 정보가 맞지 않습니다.';
@@ -148,20 +147,16 @@ export function login() {
     async function requestLogin() {
         loginButton.disabled = true;
 
-        try {
-            const response = await new Api()
-                .post()
-                .url(apiPath.LOGIN_API_URL)
-                .body({
-                    email: emailInput.value,
-                    password: passwordInput.value
-                })
-                .request();
+        const response = await new Api()
+            .post()
+            .url(apiPath.LOGIN_API_URL)
+            .body({
+                email: emailInput.value,
+                password: passwordInput.value
+            })
+            .request();
 
-            return response;
-        } finally {
-            activeLoginButton();
-        }
+        return response;
     }
     return root;
 }

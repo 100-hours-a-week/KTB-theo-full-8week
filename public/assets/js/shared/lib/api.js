@@ -112,7 +112,6 @@ export class Api {
 
         // 4XX, 5XX 응답
         if (!response.ok) {
-            console.log(result);
             // api 에러 처리
             throw new ApiError(
                 result.code,
