@@ -185,8 +185,6 @@ export async function editProfile() {
             const newProfileImageUrl = responseBody.profileImage;
             localStorage.setItem('profileImageUrl', newProfileImageUrl);
             emit('user:editProfile', { newProfileImageUrl });
-
-
             // 토스트 메시지 띄우기
 
         } catch (error) {
@@ -198,6 +196,7 @@ export async function editProfile() {
             activeProfileUpdateButton();
         }
     }
+
     // API 요청 함수
     // 1. 현재 유저 정보 조회 요청 API
     async function requestCurrentUser() {

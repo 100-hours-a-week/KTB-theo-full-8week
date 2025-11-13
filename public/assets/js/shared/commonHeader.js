@@ -22,7 +22,7 @@ export function commonHeader() {
                             <img id="common-header-userprofile" 
                             src="${apiPath.API_SERVER_URL + localStorage.getItem('profileImageUrl')}">
                         </button>
-                        <div class="common-header-profile-menu" hidden>
+                        <div class="common-header-profile-menu hide" hidden >
                             <button class="header-profile-menu-btn" data-action="edit-profile">회원정보 수정</button>
                             <button class="header-profile-menu-btn" data-action="edit-password">비밀번호 수정</button>
                             <button class="header-profile-menu-btn"  data-action="logout">로그아웃</button>
@@ -65,15 +65,34 @@ export function commonHeader() {
     // 로그인 시 프로필 이미지 변경 커스텀 이벤트 등록
     eventBus.addEventListener('user:login', (event, options) => {
         updateProfileImage();
+        showProfileMenu();
     })
 
     eventBus.addEventListener('user:editProfile', (event, options) => {
         updateProfileImage();
     })
 
+    eventBus.addEventListener('user:logout', (event, options) => {
+        updateProfileImage();
+        hideProfileMenu();
+    })
+
+    // 헤더 프로필 로컬 스토리지 기반 이미지 업데이트
     function updateProfileImage() {
         profileImage.src = apiPath.API_SERVER_URL + localStorage.getItem('profileImageUrl');
     }
+
+    // 로그아웃 시 드롭다운 메뉴 숨기기
+    function hideProfileMenu() {
+        menu.classList.add('hide');
+    }
+
+    // 로그인 시 드롭다운 메뉴 보이기
+    function showProfileMenu() {
+        menu.classList.remove('hide');
+    }
+
+
     // 드롭다운 메뉴 토들 핸들러
     function toggleProfileMenu() {
         const open = menu.hidden;
@@ -99,7 +118,7 @@ export function commonHeader() {
                 navigate('/editPassword');
                 break;
             case "logout":
-                navigate('/');
+                navigate('/logout');
                 break;
         }
         closeMenu();
