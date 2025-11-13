@@ -11,6 +11,7 @@ export const apiPath = {
     EAMIL_DOUBLE_CHECK_URL: '/user/email/double-check',
     NICKNAME_DOUBLE_CHECK_URL: '/user/nickname/double-check',
     NICKNAME_EDIT_URL: (userId) => { return `/user/${userId}/nickname` },
+    DELETE_USER_URL: '/user',
 
     //Post
     POST_CARD_LIST_API_URL: '/post',

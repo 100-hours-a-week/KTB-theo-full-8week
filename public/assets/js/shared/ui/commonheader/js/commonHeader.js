@@ -1,8 +1,8 @@
-import { activeCommonCss } from "./lib/dom.js";
-import { cssPath } from "./path/cssPath.js";
-import { apiPath } from "./path/apiPath.js";
-import { goBack, navigate } from "./lib/router.js";
-import { eventBus } from "./lib/eventBus.js";
+import { activeCommonCss } from "../../../lib/dom.js";
+import { cssPath } from "../../../path/cssPath.js";
+import { apiPath } from "../../../path/apiPath.js";
+import { goBack, navigate } from "../../../lib/router.js";
+import { eventBus } from "../../../lib/eventBus.js";
 
 activeCommonCss(cssPath.COMMON_HEADER_CSS_PATH);
 

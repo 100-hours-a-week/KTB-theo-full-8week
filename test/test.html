@@ -10,28 +10,12 @@
 </head>
 
 <body>
-    <div class="edit-profile-container">
-        <div class="edit-profile-wrapper">
-            <h2>회원정보수정</h2>
-            <form id="edit-profile-form">
-                <div class="edit-profile-field">
-                    <label class="edit-profile-label" for="edit-profile-form-profile-image">프로필 사진*</label>
-                    <input id="edit-profile-form-profile-image" type="file" accept="image/*">
-                    <button id="edit-profile-image-upload-btn" type="button">+</button>
-                </div>
-                <div class="edit-profile-field">
-                    <label class="edit-profile-label">이메일*</label>
-                    <p>hwongyoungmin@gmail.com</p>
-                </div>
-                <div class="edit-profile-field">
-                    <label class="edit-profile-label" for="edit-profile-form-nickname">닉네임</label>
-                    <input id="edit-profile-form-nickname" name="nickname" type="text" class="edit-profile-input"
-                        required placeholder="닉네임을 입력하세요">
-                    <p class="edit-profile-form-helper-text"></p>
-                </div>
-                <button id="edit-profile-btn" type="submit" disabled>수정하기</button>
-            </form>
-            <a id="edit-profile-to-unsubscribe-link">회원 탈퇴</a>
+    <div class="modal-container">
+        <div class="modal-wrapper">
+            <h2 class="modal-title">회원탈퇴 하시겠습니까?</h2>
+            <p class="modal-detail">작성된 게시글과 댓글은 삭제됩니다.</p>
+            <button id="modal-cancel-btn" class="modal-btn">취소</button>
+            <button id="modal-confirm-btn" class="modal-btn">확인</button>
         </div>
     </div>
 </body>

@@ -24,6 +24,8 @@
     padding: 2% 4%;
     width: 40%;
     border-radius: 20px;
+
+    cursor: pointer;
 }
 
 #modal-cancel-btn {

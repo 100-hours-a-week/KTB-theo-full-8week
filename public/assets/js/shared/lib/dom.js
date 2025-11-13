@@ -1,5 +1,5 @@
 const FUEATURES_CSS_PATH_PREFIX = './assets/js/features';
-const COMMON_CSS_PATH_PREFIX = './assets/js/shared'
+const COMMON_CSS_PATH_PREFIX = './assets/js/shared/ui'
 
 /**
  * 

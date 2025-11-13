@@ -149,6 +149,7 @@
     text-decoration-line: none;
     text-align: center;
     margin-bottom: 20%;
+    cursor: pointer;
 }
 
 #edit-profile-to-posts {

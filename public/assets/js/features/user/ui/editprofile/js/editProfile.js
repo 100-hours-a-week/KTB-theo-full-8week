@@ -6,13 +6,13 @@ import { isBlank, isFile, isOverMaxLength } from "../../../../../shared/lib/util
 import { ApiError } from "../../../../../shared/lib/api-error.js";
 import { emit } from "../../../../../shared/lib/eventBus.js";
 import { navigate } from "../../../../../shared/lib/router.js";
+import { modal } from "../../../../../shared/ui/modal/js/modal.js";
 
 activeFeatureCss(cssPath.EDIT_PROFILE_CSS_PATH);
 
 export async function editProfile() {
     const responseBody = await requestCurrentUser();
     const currentUser = responseBody.data;
-    console.log(currentUser);
     const root = document.createElement('div');
     root.className = 'edit-profile-container';
     root.innerHTML =
@@ -96,7 +96,12 @@ export async function editProfile() {
         navigate('/post');
     })
 
+    unsubscribeLink.addEventListener('click', () => {
+        handleUnsubscribeUser();
+    })
 
+
+    // 핸들러 함수
     // 프로필 업데이트 활성화 함수
     function activeProfileUpdateButton() {
         const nickname = String(nicknameInput.value).trim();
@@ -142,7 +147,7 @@ export async function editProfile() {
         const isDuplicate = !responseBody.available;
 
         isDuplicatedNickname = isDuplicate;
-        console.log(isDuplicatedNickname);
+
         if (isDuplicate) {
             helpertext.textContent = '중복된 닉네임입니다.';
             return false;
@@ -179,7 +184,6 @@ export async function editProfile() {
 
             const response = await requestProfileEdit(userId, oldFilePath, profileImage, nickname);
             const responseBody = response.data;
-            console.log(responseBody);
 
 
             const newProfileImageUrl = responseBody.profileImage;
@@ -197,23 +201,41 @@ export async function editProfile() {
         }
     }
 
+    // 회원 탈퇴 모달창 핸들러
+    function handleUnsubscribeUser() {
+        const handleCancelChoice = function () {
+        }
+        const handleConfirmChoice = async function () {
+            const userId = localStorage.getItem('currentUserId');
+            await requestDeleteUser(userId);
+            navigate('/logout');
+        }
+
+        const modalLogic = {
+            title: "회원탈퇴 하시겠습니까?",
+            detail: "작성된 게시글과 댓글은 삭제됩니다.",
+            cancelLogic: handleCancelChoice,
+            confirmLogic: handleConfirmChoice,
+        }
+        const modalComponent = modal(modalLogic);
+        root.appendChild(modalComponent);
+    }
+
+
     // API 요청 함수
     // 1. 현재 유저 정보 조회 요청 API
     async function requestCurrentUser() {
-        console.log('send requestCurrentUser');
         const userId = localStorage.getItem('currentUserId');
         const response = await new Api()
             .get()
             .url(`${apiPath.FIND_USER_URL}/${userId}`)
             .print()
             .request();
-        console.log(response);
         return response;
     }
 
     // 2. 닉네임 중복 검사 요청 API
     async function requestNicknameDuplication(nickname) {
-        console.log('send requestNicknameDuplication');
         const response = await new Api()
             .post()
             .url(apiPath.NICKNAME_DOUBLE_CHECK_URL)
@@ -239,6 +261,17 @@ export async function editProfile() {
             .toFormData()
             .print()
             .request()
+        return response;
+    }
+
+    // 4. 회원 삭제 요청 API
+    async function requestDeleteUser(userId) {
+        const response = await new Api()
+            .delete()
+            .url(`${apiPath.DELETE_USER_URL}/${userId}`)
+            .print()
+            .request()
+
         return response;
     }
     return root;

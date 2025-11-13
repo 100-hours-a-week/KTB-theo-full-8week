@@ -6,6 +6,7 @@ import { ApiError } from "../../../../../shared/lib/api-error.js";
 import { navigate } from "../../../../../shared/lib/router.js";
 import { isEmail, isValidPasswordPattern, isBlank, isBetweenLength } from "../../../../../shared/lib/util/util.js";
 import { emit } from "../../../../../shared/lib/eventBus.js";
+import { modal } from "../../../../../shared/ui/modal/js/modal.js";
 
 activeFeatureCss(cssPath.LOGIN_CSS_PATH);
 
@@ -33,6 +34,7 @@ export function login() {
                 <a id="login-to-signup-link" href="/signup" class="router-link"> 회원가입</a>
             </div>
         </div>`;
+
 
     const form = root.querySelector('#login-form');
     const emailInput = root.querySelector('#login-form-email');
