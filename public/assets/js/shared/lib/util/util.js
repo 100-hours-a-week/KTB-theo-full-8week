@@ -19,3 +19,7 @@ export function isOverMaxLength(str, max) {
 export function isBetweenLength(str, min, max) {
     return (str.length >= min) && (str.length <= max);
 }
+
+export function isFile(file) {
+    return file.type.startsWith('image/');
+}

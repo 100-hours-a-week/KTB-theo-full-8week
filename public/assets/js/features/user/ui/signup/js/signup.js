@@ -4,7 +4,7 @@ import { apiPath } from "../../../../../shared/path/apiPath.js";
 import { cssPath } from "../../../../../shared/path/cssPath.js";
 import { navigate } from "../../../../../shared/lib/router.js";
 import { ApiError } from "../../../../../shared/lib/api-error.js";
-import { isEmail, isValidPasswordPattern, isBetweenLength, isBlank, isOverMaxLength } from "../../../../../shared/lib/util/util.js";
+import { isEmail, isValidPasswordPattern, isBetweenLength, isBlank, isOverMaxLength, isFile } from "../../../../../shared/lib/util/util.js";
 
 activeFeatureCss(cssPath.SIGNUP_CSS_PATH);
 
@@ -138,9 +138,8 @@ export function signup() {
         activeSignUpButton();
     })
 
-    //  닉네임 input 태그 이벤트 등록(blur)
+    //  닉네임 유효성 검증 완료해야 닉네임 중복 검사 API 요청
     nicknameInput.addEventListener('blur', async () => {
-        // 닉네임 유효성 검증 완료해야 중복 검사API 요청
         const isValidNickname = handleInvalidNicknamePattern();
         if (!isValidNickname) {
             return;
@@ -317,9 +316,10 @@ export function signup() {
             return;
         }
 
-        if (!file.type.startsWith('image/')) {
+        if (!isFile(file)) {
             profileImageUploadButton.innerHTML = '+';
             helperTexts['profile-image'].textContent = '이미지 파일만 업로드 가능합니다.'
+            return;
         }
 
         helperTexts['profile-image'].textContent = '';

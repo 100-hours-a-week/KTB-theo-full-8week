@@ -64,11 +64,16 @@ export function commonHeader() {
 
     // 로그인 시 프로필 이미지 변경 커스텀 이벤트 등록
     eventBus.addEventListener('user:login', (event, options) => {
-        console.log('event occur');
-        profileImage.src = apiPath.API_SERVER_URL + localStorage.getItem('profileImageUrl');
+        updateProfileImage();
     })
 
+    eventBus.addEventListener('user:editProfile', (event, options) => {
+        updateProfileImage();
+    })
 
+    function updateProfileImage() {
+        profileImage.src = apiPath.API_SERVER_URL + localStorage.getItem('profileImageUrl');
+    }
     // 드롭다운 메뉴 토들 핸들러
     function toggleProfileMenu() {
         const open = menu.hidden;
@@ -88,10 +93,10 @@ export function commonHeader() {
 
         switch (action) {
             case "edit-profile":
-                navigate('/edit-profile');
+                navigate('/editProfile');
                 break;
             case "edit-password":
-                navigate('/edit-password');
+                navigate('/editPassword');
                 break;
             case "logout":
                 navigate('/');

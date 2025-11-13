@@ -10,34 +10,28 @@
 </head>
 
 <body>
-    <div class="make-post-container">
-        <div class="make-post-wrapper">
-            <h2>게시글 작성</h2>
-            <form id="make-post-form">
-                <div class="make-post-field">
-                    <label class="make-post-label">제목*</label>
-                    <input id="make-post-form-title" name="title" class="make-post-input" required
-                        placeholder="제목을 입력해주세요.(최대 26글자)">
+    <div class="edit-profile-container">
+        <div class="edit-profile-wrapper">
+            <h2>회원정보수정</h2>
+            <form id="edit-profile-form">
+                <div class="edit-profile-field">
+                    <label class="edit-profile-label" for="edit-profile-form-profile-image">프로필 사진*</label>
+                    <input id="edit-profile-form-profile-image" type="file" accept="image/*">
+                    <button id="edit-profile-image-upload-btn" type="button">+</button>
                 </div>
-                <div class="make-post-field">
-                    <label class="make-post-label">내용*</label>
-                    <textarea id="make-post-form-article" type="" name="article" class="make-post-input" required
-                        placeholder="내용을 입력해주세요"></textarea>
-                    <p id="make-post-form-helper-text">*helper text</p>
+                <div class="edit-profile-field">
+                    <label class="edit-profile-label">이메일*</label>
+                    <p>hwongyoungmin@gmail.com</p>
                 </div>
-                <div class="make-post-field">
-                    <label class="make-post-label">이미지</label>
-                    <div class="make-post-form-file-row">
-                        <input id="make-post-form-article-image" type="file" accept="image/*" name="article-image"
-                            class="make-post-input"></input>
-                        <label class="make-post-file-btn" for="make-post-form-article-image">
-                            파일 선택
-                        </label>
-                        <span class="make-post-file-text">파일을 선택해주세요</span>
-                    </div>
+                <div class="edit-profile-field">
+                    <label class="edit-profile-label" for="edit-profile-form-nickname">닉네임</label>
+                    <input id="edit-profile-form-nickname" name="nickname" type="text" class="edit-profile-input"
+                        required placeholder="닉네임을 입력하세요">
+                    <p class="edit-profile-form-helper-text"></p>
                 </div>
-                <button id="make-post-btn" type="submit" disabled>완료</button>
+                <button id="edit-profile-btn" type="submit" disabled>수정하기</button>
             </form>
+            <a id="edit-profile-to-unsubscribe-link">회원 탈퇴</a>
         </div>
     </div>
 </body>

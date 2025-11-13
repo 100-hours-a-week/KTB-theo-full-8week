@@ -6,6 +6,7 @@ export const cssPath = {
 
     //User
     SIGNUP_CSS_PATH: '/user/ui/signup/css/signup.css',
+    EDIT_PROFILE_CSS_PATH: '/user/ui/editprofile/css/editProfile.css',
 
     //Post
     POST_CARD_CSS_PATH: '/post/ui/posts/css/postCard.css',

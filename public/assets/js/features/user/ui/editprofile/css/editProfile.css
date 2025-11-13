@@ -15,13 +15,11 @@
 }
 
 .edit-profile-field {
-    max-width: 100%;
-}
-
-.edit-profile-field{
     display: flex;
     flex-direction: column;
     align-items: center;
+
+    max-width: 100%;
 }
 
 .edit-profile-field .edit-profile-label,
@@ -31,6 +29,12 @@
     margin-right: 0;
 }
 
+.edit-profile-field p {
+    text-align: left;;
+    width: 100%;
+    margin: 0;
+    padding-left: 2%;
+}
 .edit-profile-input {
     display: block;
     width: 98%;
@@ -61,6 +65,7 @@
     box-sizing: border-box;
     color: #FF3333;
     font-size: 0.8rem;
+    margin-top: 10%;
 }
 
 #edit-profile-form {
@@ -78,13 +83,13 @@
 }
 
 #edit-profile-form .edit-profile-field:nth-child(3) {
-    margin-bottom: 1%;
+    margin-bottom: 5%;
 }
 
-#edit-profile-form-preview {
+#edit-profile-image-preview {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit:fill;
     display: block;
 }
 #edit-profile-form-profile-image {
@@ -115,19 +120,21 @@
    background-color: transparent;
 }
 
-#edit-profile-btn {
+#edit-profile-update-btn {
     display: block;
     text-align: center;
     width: 100%;
     padding: 2% 0;
     margin: 0 auto;
     height: 50%;
+    border: none;
     border-radius: 10px;
     color: white;
     background-color: #ACA0EB;
+    font-size: 1.2rem;
 }
 
-#edit-profile-btn.active {
+#edit-profile-update-btn.active {
     background-color: #7F6AEE;
     cursor: pointer;
 }
@@ -141,5 +148,21 @@
     color: black;
     text-decoration-line: none;
     text-align: center;
+    margin-bottom: 20%;
 }
 
+#edit-profile-to-posts {
+    display: block;
+    text-align: center;
+    width: 30%;
+    padding: 2% 2%;
+    margin: 0 auto;
+    height: 100%;
+    border-radius: 20px;
+    color: white;
+    border: none;
+    background-color: #ACA0EB;
+    font-weight: lighter;
+    font-size: 1.2rem;
+    cursor: pointer;
+}

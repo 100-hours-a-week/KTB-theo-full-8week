@@ -19,8 +19,8 @@ export class Api {
         return this;
     }
 
-    put() {
-        this.#method = 'PUT';
+    patch() {
+        this.#method = 'PATCH';
         return this;
     }
 
