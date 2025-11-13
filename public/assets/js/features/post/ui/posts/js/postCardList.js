@@ -5,6 +5,8 @@ import { ApiError } from "../../../../../shared/lib/api-error.js";
 import { postCard } from "./postCard.js";
 import { postCardListHeader } from "./postCardListHeader.js";
 import { apiPath } from "../../../../../shared/path/apiPath.js";
+import { eventBus } from "../../../../../shared/lib/eventBus.js";
+import { post } from "../../post/js/post.js";
 
 activeFeatureCss(cssPath.POST_CARD_LIST_CSS_PATH);
 
@@ -22,17 +24,43 @@ export function postCardList() {
     const root = document.createElement('div');
     root.className = 'post-card-list-container';
 
-    root.appendChild(postCardListHeader());
+    const listSection = document.createElement('div');
+    listSection.className = 'post-card-list-section';
+    listSection.classList.add('active');
+
+    listSection.appendChild(postCardListHeader());
 
     // 무한 스크롤용 sentinel 박스 생성
     const sentinel = document.createElement('div');
     sentinel.className = 'post-card-list-sentinel';
-    root.appendChild(sentinel);
+    listSection.appendChild(sentinel);
+
+
+    // 게시글 상세페이지 섹션
+    const detailSection = document.createElement('div');
+    detailSection.className = 'post-detail-section';
+
+    root.appendChild(listSection);
+    root.appendChild(detailSection);
 
     addObserver();
     loadNextPage();
 
-    return root;
+    // postCard 클릭 시 -> 상세 화면으로 전환
+    eventBus.addEventListener('post:postCardClick', async (event, options) => {
+        const { postId } = event.detail;
+        listSection.classList.remove('active');
+        // const postComponent = post(); // API 호출할거니까 await 붙이기
+        detailSection.appendChild(post());
+        detailSection.classList.add('active');
+    })
+
+    // PostCar에서 '목록으로'버튼 클릭시 게시글 리스트로 전환
+    eventBus.addEventListener('post:backToList', (event, options) => {
+        detailSection.classList.remove('active');
+        detailSection.innerHTML = '';
+        listSection.classList.add('active');
+    })
 
     // 무한 스크롤용 옵저버 추가
     function addObserver() {
@@ -64,7 +92,7 @@ export function postCardList() {
             // Post 렌더링
             const contents = responseBody.contents;
             contents.forEach((post) => {
-                root.insertBefore(postCard(post), sentinel);
+                listSection.insertBefore(postCard(post), sentinel);
             })
 
             // 다음 로드 페이지 계산
@@ -96,5 +124,5 @@ export function postCardList() {
         }
     }
 
-
+    return root;
 }

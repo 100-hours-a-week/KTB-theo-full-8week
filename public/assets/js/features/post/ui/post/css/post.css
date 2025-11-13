@@ -10,7 +10,7 @@
 .post-wrapper {
     border: 1px solid black;
 
-    width: 50%;
+    width: 100%;
 }
 
 .post-header-container {
@@ -18,8 +18,15 @@
     flex-direction: column;
 }
 
-.post-header-container > h2 {
-    padding-left: 2%;
+.post-header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 2% 2%;
+}
+
+.post-header-top > h2 {
+    margin: 0;
 }
 
 .post-header-meta {
@@ -126,6 +133,16 @@
 .post-article-status > div label:last-child {
     font-size: 1.2rem;
     margin-bottom: 3%;
+}
+
+#post-back-btn {
+    border: 1px solid #aca0eb;
+    border-radius: 12px;
+    background-color: transparent;
+
+    font-size: 1.2rem;
+    padding: 1% 1%;
+    cursor: pointer;
 }
 
 #post-author-profile-image {

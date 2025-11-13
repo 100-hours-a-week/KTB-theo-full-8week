@@ -14,6 +14,7 @@ export const cssPath = {
     POST_CARD_CSS_PATH: '/post/ui/posts/css/postCard.css',
     POST_CARD_LIST_CSS_PATH: '/post/ui/posts/css/postCardList.css',
     POST_CARD_LIST_HEADER_CSS_PATH: '/post/ui/posts/css/postCardListHeader.css',
-    MAKE_POST_CSS_PATH: '/post/ui/makepost/css/makePost.css'
+    MAKE_POST_CSS_PATH: '/post/ui/makepost/css/makePost.css',
+    POST_CSS_PATH: '/post/ui/post/css/post.css',
 }
 Object.freeze(cssPath); // ENUM;

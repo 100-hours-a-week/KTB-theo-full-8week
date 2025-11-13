@@ -1,19 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
+import { activeFeatureCss } from "../../../../../shared/lib/dom.js";
+import { emit } from "../../../../../shared/lib/eventBus.js";
+import { cssPath } from "../../../../../shared/path/cssPath.js";
 
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="test.css">
-    <script src="./test.js"></script>
-    <title>Document</title>
-</head>
 
-<body>
-    <div class="post-container">
+activeFeatureCss(cssPath.POST_CSS_PATH);
+
+export function post() {
+    const root = document.createElement('div');
+    root.className = 'post-container';
+    root.innerHTML =
+        `
         <div class="post-wrapper">
             <div class="post-header-container">
-                <h2>제목1</h2>
+                <div class="post-header-top">
+                    <h2>제목1</h2>
+                    <button id="post-back-btn">목록으로</button>
+                </div>
                 <div class="post-header-meta">
                     <div class="post-author-field">
                         <div class="post-author-profile">
@@ -30,7 +32,7 @@
             </div>
             <div class="post-article-container">
                 <div class="post-article-image-box">
-                    <img id="post-article-image" src="../public/assets/img/noneProfile.png">
+                    <img id="post-article-image">
                 </div>
                 <p id="post-article-text">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Excepturi quis ad
                     commodi! Exercitationem veniam cumque ullam dignissimos odio corporis tempora similique consectetur
@@ -58,7 +60,12 @@
             </div>
             <div class="post-comment-container"></div>
         </div>
-    </div>
-</body>
+        `;
 
-</html>
+    const backToListButton = root.querySelector('#post-back-btn');
+
+    backToListButton.addEventListener('click', () => {
+        emit('post:backToList');
+    })
+    return root;
+}

@@ -19,8 +19,7 @@ export function commonHeader() {
                 <div class="common-header-right">
                     <div class="profile-trigger">
                         <button id="common-header-profile-btn">
-                            <img id="common-header-userprofile" 
-                            src="${apiPath.API_SERVER_URL + localStorage.getItem('profileImageUrl')}">
+                            <img id="common-header-userprofile">
                         </button>
                         <div class="common-header-profile-menu hide" hidden >
                             <button class="header-profile-menu-btn" data-action="edit-profile">회원정보 수정</button>
@@ -36,7 +35,7 @@ export function commonHeader() {
     const backButton = root.querySelector('#common-back-btn');
     const profileButton = root.querySelector('#common-header-profile-btn');
     const profileImage = root.querySelector('#common-header-userprofile');
-
+    updateProfileImage();
 
     // 돌아가기 버튼 이벤트 등록
     backButton.addEventListener('click', () => {

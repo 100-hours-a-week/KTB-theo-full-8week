@@ -1,4 +1,21 @@
 .post-card-list-container{
-    width: 50%;
+    width: 60%;
     margin: 4% auto;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.post-card-list-section {
+    display: none;
+}
+.post-card-list-section.active {
+    display: block;
+}
+.post-detail-section {
+    display: none;
+    width: 100%;
+}
+.post-detail-section.active {
+    display: block;
 }

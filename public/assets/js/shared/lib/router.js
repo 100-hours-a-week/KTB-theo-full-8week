@@ -4,6 +4,7 @@ import { signup } from "../../features/user/ui/signup/js/signup.js";
 import { postCardList } from "../../features/post/ui/posts/js/postCardList.js";
 import { makePost } from "../../features/post/ui/makePost/js/makePost.js";
 import { editProfile } from "../../features/user/ui/editprofile/js/editProfile.js";
+import { post } from "../../features/post/ui/post/js/post.js";
 
 let history = ['/'];
 

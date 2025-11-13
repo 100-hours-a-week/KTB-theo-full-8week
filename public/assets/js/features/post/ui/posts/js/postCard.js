@@ -1,4 +1,5 @@
 import { activeFeatureCss } from "../../../../../shared/lib/dom.js";
+import { emit } from "../../../../../shared/lib/eventBus.js";
 import { apiPath } from "../../../../../shared/path/apiPath.js";
 import { cssPath } from "../../../../../shared/path/cssPath.js";
 
@@ -33,5 +34,10 @@ export function postCard(post) {
         </div>
         `;
 
+
+    root.addEventListener('click', () => {
+        const postId = id;
+        emit('post:postCardClick', { postId });
+    })
     return root;
 }
