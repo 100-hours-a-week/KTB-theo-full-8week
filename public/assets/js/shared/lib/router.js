@@ -1,5 +1,5 @@
 import { login } from "../../features/auth/ui/login/js/login.js"
-import { logout } from "../../features/user/ui/logout/js/logout.js";
+import { logout } from "../../features/auth/ui/logout/js/logout.js";
 import { signup } from "../../features/user/ui/signup/js/signup.js";
 import { postCardList } from "../../features/post/ui/posts/js/postCardList.js";
 import { makePost } from "../../features/post/ui/makePost/js/makePost.js";
