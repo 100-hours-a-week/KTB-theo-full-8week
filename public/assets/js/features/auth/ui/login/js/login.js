@@ -6,7 +6,6 @@ import { ApiError } from "../../../../../shared/lib/api-error.js";
 import { navigate } from "../../../../../shared/lib/router.js";
 import { isEmail, isValidPasswordPattern, isBlank, isBetweenLength } from "../../../../../shared/lib/util/util.js";
 import { emit } from "../../../../../shared/lib/eventBus.js";
-import { modal } from "../../../../../shared/ui/modal/js/modal.js";
 
 activeFeatureCss(cssPath.LOGIN_CSS_PATH);
 
@@ -130,13 +129,14 @@ export function login() {
             const response = await requestLogin();
             const responseBody = response.data;
             const isLoginSuccess = responseBody.loginSuccess;
-            const profileImageUrl = responseBody.profileImage;
+            const profileImage = responseBody.profileImage;
 
+            console.log(profileImage)
             if (isLoginSuccess) {
                 // TODO: 로그인 성공 시 게시글 목록화면으로 라우팅 처리 필요
                 localStorage.setItem('currentUserId', responseBody.id);
-                localStorage.setItem('profileImageUrl', profileImageUrl);
-                emit('user:login', { profileImageUrl });
+                localStorage.setItem('profileImage', profileImage);
+                emit('user:login', { profileImage });
                 navigate('/post');
             } else {
                 helperText.textContent = '로그인 정보가 맞지 않습니다.';

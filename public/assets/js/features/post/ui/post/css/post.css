@@ -153,6 +153,10 @@
 }
 
 #post-article-image {
-    width: 100%;
-    
+    width: 100%;   
+}
+
+#post-article-image:not([src]),
+#post-article-image[src=""] {
+    display: none;
 }

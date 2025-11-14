@@ -30,7 +30,7 @@ export async function post(postId) {
                     <div class="post-author-field">
                         <div class="post-author-profile">
                             <img id="post-author-profile-image"
-                            ${authorImage ? `src=${apiPath.API_SERVER_URL + authorImage}` : ''}>
+                            ${authorImage ? `src=${apiPath.PROFILE_IMAGE_STORATE_URL + authorImage}` : ''}>
                         </div>
                         <label class="post-author-nickname-field">${authorNickname}</label>
                         <p class="post-createdat">${createdAt}</p>
@@ -44,7 +44,7 @@ export async function post(postId) {
             <div class="post-article-container">
                 <div class="post-article-image-box">
                     <img id="post-article-image" 
-                    ${articleImage ? `src=${apiPath.API_SERVER_URL + articleImage}` : ''}>
+                    ${articleImage ? `src=${apiPath.ARTICLE_IMAGE_STORAGE_URL + articleImage}` : ''}>
                 </div>
                 <p id="post-article-text">${article}</p>
                 <div class="post-article-status">

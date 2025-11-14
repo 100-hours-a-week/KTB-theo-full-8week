@@ -78,7 +78,7 @@ export function commonHeader() {
 
     // 헤더 프로필 로컬 스토리지 기반 이미지 업데이트
     function updateProfileImage() {
-        profileImage.src = apiPath.API_SERVER_URL + localStorage.getItem('profileImageUrl');
+        profileImage.src = apiPath.PROFILE_IMAGE_STORATE_URL + localStorage.getItem('profileImage');
     }
 
     // 로그아웃 시 드롭다운 메뉴 숨기기

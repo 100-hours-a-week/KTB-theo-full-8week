@@ -26,7 +26,7 @@ export function postCard(post) {
                 </div>
                 <div class="post-card-author-field">
                     <div class="post-card-author-profile">
-                        <img ${authorImage ? `src="${apiPath.API_SERVER_URL + authorImage}"` : ''}>
+                        <img ${authorImage ? `src="${apiPath.PROFILE_IMAGE_STORATE_URL + authorImage}"` : ''}>
                     </div>
                     <div class="post-card-author-nickname">${authorNickname}</div>
                 </div>

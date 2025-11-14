@@ -24,7 +24,7 @@ export async function editProfile() {
                     <label class="edit-profile-label" for="edit-profile-form-profile-image">프로필 사진*</label>
                     <input id="edit-profile-form-profile-image" type="file" accept="image/*">
                     <button id="edit-profile-image-upload-btn" type="button">
-                        <img id="edit-profile-image-preview" src="${apiPath.API_SERVER_URL + currentUser.profileImage}">
+                        <img id="edit-profile-image-preview" src="${apiPath.PROFILE_IMAGE_STORATE_URL + currentUser.profileImage}">
                     </button>
                 </div>
                 <div class="edit-profile-field">
@@ -178,7 +178,7 @@ export async function editProfile() {
 
         try {
             const userId = currentUser.id;
-            const oldFilePath = localStorage.getItem('profileImageUrl');
+            const oldFilePath = localStorage.getItem('profileImage');
             const profileImage = profileImageInput.files[0];
             const nickname = String(nicknameInput.value).trim();
 
@@ -187,7 +187,7 @@ export async function editProfile() {
 
 
             const newProfileImageUrl = responseBody.profileImage;
-            localStorage.setItem('profileImageUrl', newProfileImageUrl);
+            localStorage.setItem('profileImage', newProfileImageUrl);
             emit('user:editProfile', { newProfileImageUrl });
             // 토스트 메시지 띄우기
 
