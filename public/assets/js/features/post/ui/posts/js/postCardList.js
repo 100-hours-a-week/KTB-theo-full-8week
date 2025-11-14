@@ -20,10 +20,10 @@ export function postCardList() {
     // 페이지 로딩 플래그
     let isLoading = false;
 
-
     const root = document.createElement('div');
     root.className = 'post-card-list-container';
 
+    // 게시글 목록 화면용 섹션
     const listSection = document.createElement('div');
     listSection.className = 'post-card-list-section';
     listSection.classList.add('active');
@@ -43,15 +43,17 @@ export function postCardList() {
     root.appendChild(listSection);
     root.appendChild(detailSection);
 
+    // 게시글 목록 화면 옵저버 추가
     addObserver();
+    // 초기 페이지 로드
     loadNextPage();
 
     // postCard 클릭 시 -> 상세 화면으로 전환
     eventBus.addEventListener('post:postCardClick', async (event, options) => {
         const { postId } = event.detail;
         listSection.classList.remove('active');
-        // const postComponent = post(); // API 호출할거니까 await 붙이기
-        detailSection.appendChild(post());
+        const postComponent = await post(postId); // API 호출할거니까 await 붙이기
+        detailSection.appendChild(postComponent);
         detailSection.classList.add('active');
     })
 

@@ -1,28 +1,39 @@
 import { activeFeatureCss } from "../../../../../shared/lib/dom.js";
 import { emit } from "../../../../../shared/lib/eventBus.js";
 import { cssPath } from "../../../../../shared/path/cssPath.js";
+import { Api } from "../../../../../shared/lib/api.js";
+import { apiPath } from "../../../../../shared/path/apiPath.js";
 
 
 activeFeatureCss(cssPath.POST_CSS_PATH);
 
-export function post() {
+export async function post(postId) {
+    const responseBody = await requestPostDetail(postId);
+    const postDetail = responseBody.data;
+
+    const { id, title, authorNickname,
+        article, articleImage, authorImage,
+        commentCount, createdAt, hit, like } = postDetail;
+
+    console.log(postDetail);
     const root = document.createElement('div');
-    root.className = 'post-container';
+    root.className = `post-container ${id}`;
     root.innerHTML =
         `
         <div class="post-wrapper">
             <div class="post-header-container">
                 <div class="post-header-top">
-                    <h2>제목1</h2>
+                    <h2>${title}</h2>
                     <button id="post-back-btn">목록으로</button>
                 </div>
                 <div class="post-header-meta">
                     <div class="post-author-field">
                         <div class="post-author-profile">
-                            <img id="post-author-profile-image">
+                            <img id="post-author-profile-image"
+                            ${authorImage ? `src=${apiPath.API_SERVER_URL + authorImage}` : ''}>
                         </div>
-                        <label class="post-author-nickname-field">더미 작성자</label>
-                        <p class="post-createdat">2021-01-01 00:00:00</p>
+                        <label class="post-author-nickname-field">${authorNickname}</label>
+                        <p class="post-createdat">${createdAt}</p>
                     </div>
                     <div class="post-control-field">
                         <button id="post-update-btn" class="post-control-btn">수정</button>
@@ -32,28 +43,21 @@ export function post() {
             </div>
             <div class="post-article-container">
                 <div class="post-article-image-box">
-                    <img id="post-article-image">
+                    <img id="post-article-image" 
+                    ${articleImage ? `src=${apiPath.API_SERVER_URL + articleImage}` : ''}>
                 </div>
-                <p id="post-article-text">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Excepturi quis ad
-                    commodi! Exercitationem veniam cumque ullam dignissimos odio corporis tempora similique consectetur
-                    eveniet repudiandae maxime, fugit iste, officia labore magni!
-                    Esse ratione rem explicabo repellendus optio harum, ea distinctio tempora quasi sint, molestiae
-                    saepe delectus quaerat sequi officiis neque fuga dignissimos. Reiciendis consequatur deserunt labore
-                    iusto magni rem ipsum quaerat!
-                    Sequi possimus et dicta similique, nisi vitae ratione nam ducimus, pariatur eaque debitis assumenda
-                    vel eos corporis maxime ipsum earum eius nulla. Odio fugiat neque, dolorum voluptates asperiores
-                    veniam ab.</p>
+                <p id="post-article-text">${article}</p>
                 <div class="post-article-status">
                     <div class="post-article-like-box">
-                        <label>123</label>
+                        <label>${like}</label>
                         <label>좋아요 수</label>
                     </div>
                     <div class="post-article-viewcount-box">
-                        <label>123</label>
+                        <label>${hit}</label>
                         <label>조회 수</label>
                     </div>
                     <div class="post-article-comment-box">
-                        <label>123</label>
+                        <label>${commentCount}</label>
                         <label>댓글</label>
                     </div>
                 </div>
@@ -67,5 +71,19 @@ export function post() {
     backToListButton.addEventListener('click', () => {
         emit('post:backToList');
     })
+
+
+
+    // API 요청 함수
+    // 1. 현재 post 조회 요청 API
+    async function requestPostDetail(postId) {
+        const response = await new Api()
+            .get()
+            .url(apiPath.POST_DETAIL_API_URL(postId))
+            .print()
+            .request();
+
+        return response;
+    }
     return root;
 }

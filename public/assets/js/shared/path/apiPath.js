@@ -16,5 +16,6 @@ export const apiPath = {
     //Post
     POST_CARD_LIST_API_URL: '/post',
     MAKE_POST_API_URL: '/post',
+    POST_DETAIL_API_URL: (postId) => `/post/${postId}`,
 }
 Object.freeze(apiPath); // ENUM;
