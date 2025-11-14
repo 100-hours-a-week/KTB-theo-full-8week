@@ -3,7 +3,7 @@ import { emit } from "../../../../../shared/lib/eventBus.js";
 import { cssPath } from "../../../../../shared/path/cssPath.js";
 import { Api } from "../../../../../shared/lib/api.js";
 import { apiPath } from "../../../../../shared/path/apiPath.js";
-
+import { commentCardList } from "./commentCardList.js";
 
 activeFeatureCss(cssPath.POST_CSS_PATH);
 
@@ -30,7 +30,7 @@ export async function post(postId) {
                     <div class="post-author-field">
                         <div class="post-author-profile">
                             <img id="post-author-profile-image"
-                            ${authorImage ? `src=${apiPath.PROFILE_IMAGE_STORATE_URL + authorImage}` : ''}>
+                            ${authorImage ? `src="${apiPath.PROFILE_IMAGE_STORATE_URL + authorImage}"` : ''}>
                         </div>
                         <label class="post-author-nickname-field">${authorNickname}</label>
                         <p class="post-createdat">${createdAt}</p>
@@ -44,7 +44,7 @@ export async function post(postId) {
             <div class="post-article-container">
                 <div class="post-article-image-box">
                     <img id="post-article-image" 
-                    ${articleImage ? `src=${apiPath.ARTICLE_IMAGE_STORAGE_URL + articleImage}` : ''}>
+                    ${articleImage ? `src="${apiPath.ARTICLE_IMAGE_STORAGE_URL + articleImage}"` : ''}>
                 </div>
                 <p id="post-article-text">${article}</p>
                 <div class="post-article-status">
@@ -62,9 +62,10 @@ export async function post(postId) {
                     </div>
                 </div>
             </div>
-            <div class="post-comment-container"></div>
         </div>
         `;
+    root.appendChild(commentCardList());
+
 
     const backToListButton = root.querySelector('#post-back-btn');
 

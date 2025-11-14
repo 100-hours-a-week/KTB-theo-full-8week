@@ -1,15 +1,16 @@
 .post-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    /* display: flex;
+    flex-direction: column;
+    align-items: center; */
     
-    margin-top: 2%;
-    /* width: 50%; */
+    margin-top: 2% auto;
+    /* width: 100%; */
+    
 }
 
 .post-wrapper {
-    border: 1px solid black;
-
+    border-radius: 15px;
+    background-color: white;
     width: 100%;
 }
 
@@ -151,6 +152,11 @@
     object-fit: cover;
     
 }
+#post-author-profile-image:not([src]),
+#post-author-profile-image[src=""] {
+    display: none;
+}
+
 
 #post-article-image {
     width: 100%;   
