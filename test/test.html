@@ -8,16 +8,19 @@
     <script src="./test.js"></script>
     <title>Document</title>
 </head>
-<div class="comment-card-list-container">
-    <div class="comment-card-list-wrapper">
-        <form id="comment-form">
-            <div class="comment-field">
-                <textarea placeholder="댓글을 남겨주세요!"></textarea>
-                <button id="comment-create-btn" type="submit" disabled>댓글 등록</button>
-            </div>
-        </form>
+<div class="comment-container">
+    <div class="comment-wrapper">
+        <div class="comment-author-profile-field">
+            <img id="comment-author-profile-image">
+        </div>
+        <div class="comment-author-field">
+            <label class="comment-author-nickname">닉네임</label>
+            <label class="comment-createdat">2021-01-01 00:00:00</label>
+        </div>
+        <div class="comment-content-field">
+            <p class="comment-content">댓글 내용</p>
+        </div>
     </div>
-
 </div>
 
 <body>

@@ -64,7 +64,7 @@ export async function post(postId) {
             </div>
         </div>
         `;
-    root.appendChild(commentCardList());
+    root.appendChild(commentCardList(id));
 
 
     const backToListButton = root.querySelector('#post-back-btn');

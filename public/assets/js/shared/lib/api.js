@@ -108,9 +108,7 @@ export class Api {
         const options = this.buildOptions();
 
         const response = await fetch(url, options);
-        console.log(response);
         const result = await response.json();
-        console.log(result);
 
         // 4XX, 5XX 응답
         if (!response.ok) {

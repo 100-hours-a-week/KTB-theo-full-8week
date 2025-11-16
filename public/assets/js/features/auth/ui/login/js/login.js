@@ -86,7 +86,7 @@ export function login() {
             return;
         }
 
-        const canActive = isEmail(email) || isValidPasswordPattern(password)
+        const canActive = isEmail(email) && isValidPasswordPattern(password)
             && isBetweenLength(password, 8, 20);
         loginButton.classList.toggle('active', canActive);
         loginButton.disabled = !canActive;
@@ -129,6 +129,8 @@ export function login() {
             const response = await requestLogin();
             const responseBody = response.data;
             const isLoginSuccess = responseBody.loginSuccess;
+            console.log(responseBody)
+            const nickname = responseBody.nickname;
             const profileImage = responseBody.profileImage;
 
             console.log(profileImage)
@@ -136,7 +138,10 @@ export function login() {
                 // TODO: 로그인 성공 시 게시글 목록화면으로 라우팅 처리 필요
                 localStorage.setItem('currentUserId', responseBody.id);
                 localStorage.setItem('profileImage', profileImage);
+                localStorage.setItem('nickname', nickname);
+
                 emit('user:login', { profileImage });
+
                 navigate('/post');
             } else {
                 helperText.textContent = '로그인 정보가 맞지 않습니다.';

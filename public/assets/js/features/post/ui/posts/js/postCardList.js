@@ -14,7 +14,7 @@ export function postCardList() {
     // 현재 페이지
     let currentPage = 0;
     // 페이지당 컨텐츠 개수
-    let size = 10;
+    const size = 10;
     // 다음 페이지 여부
     let hasNext = true;
     // 페이지 로딩 플래그
@@ -52,7 +52,7 @@ export function postCardList() {
     eventBus.addEventListener('post:postCardClick', async (event, options) => {
         const { postId } = event.detail;
         listSection.classList.remove('active');
-        const postComponent = await post(postId); // API 호출할거니까 await 붙이기
+        const postComponent = await post(postId);
         detailSection.appendChild(postComponent);
         detailSection.classList.add('active');
     })
@@ -113,17 +113,13 @@ export function postCardList() {
     // 게시글 목록 조회 API 요청
     // start, default Page = 0
     async function requestPostCardList(page, size) {
-        try {
-            const response = await new Api()
-                .get()
-                .url(apiPath.POST_CARD_LIST_API_URL)
-                .queryString({ page, size })
-                .request();
+        const response = await new Api()
+            .get()
+            .url(apiPath.POST_CARD_LIST_API_URL)
+            .queryString({ page, size })
+            .request();
 
-            return response;
-        } finally {
-
-        }
+        return response;
     }
 
     return root;

@@ -19,5 +19,6 @@ export const cssPath = {
 
     // Comment
     COMMENT_CARD_LIST_CSS_PATH: '/post/ui/post/css/commentCardList.css',
+    COMMENT_CSS_PATH: '/post/ui/post/css/comment.css',
 }
 Object.freeze(cssPath); // ENUM;
