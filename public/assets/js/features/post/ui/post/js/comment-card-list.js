@@ -65,7 +65,7 @@ export function commentCardList(postId) {
     commentTextArea.addEventListener('input', () => {
         activeCommentSubmitButton();
     })
-
+    // 댓글 입력 창 블러 이벤트 등록
     commentTextArea.addEventListener('blur', () => {
         activeCommentSubmitButton();
     })

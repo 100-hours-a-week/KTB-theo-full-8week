@@ -112,10 +112,10 @@ export function commonHeader() {
 
         switch (action) {
             case "edit-profile":
-                navigate('/editProfile');
+                navigate('/editprofile');
                 break;
             case "edit-password":
-                navigate('/editPassword');
+                navigate('/editpassword');
                 break;
             case "logout":
                 const handleCancelChoice = function () {

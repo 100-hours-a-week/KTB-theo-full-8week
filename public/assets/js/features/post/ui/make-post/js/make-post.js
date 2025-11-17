@@ -85,17 +85,10 @@ export function makePost() {
 
     // API 요청 함수
     // 1. 게시글 생성 요청
-    async function requestMakePost() {
-        makePostButton.disabled = true;
+    async function requestMakePost(authorId, title, article, category) {
+        if (makePostButton.disabled) return;
 
-        const authorId = localStorage.getItem('currentUserId');
-
-        let body = {
-            authorId: authorId,
-            title: titleInput.value,
-            article: articleInput.value,
-            category: "COMMUNITY"
-        }
+        let body = { authorId, title, article, category }
 
         if (articleImageInput.files && articleImageInput.files.length > 0) {
             body = { ...body, articleImage: articleImageInput.files[0] }
@@ -154,8 +147,6 @@ export function makePost() {
     // 4. 게시글 본문 이미지 제목 표시 핸들러
     function handleArticleImageTitleText() {
         const articleImage = articleImageInput.files[0];
-        console.log(articleImage.name);
-        console.log(articleImageTitleText);
         articleImageTitleText.textContent = articleImage.name;
     }
 
@@ -165,7 +156,12 @@ export function makePost() {
 
 
         try {
-            const response = await requestMakePost();
+            const authorId = localStorage.getItem('currentUserId');
+            const title = String(titleInput.value).trim();
+            const article = String(articleInput.value).trim();
+            const category = "COMMUNITY";
+
+            const response = await requestMakePost(authorId, title, article, category);
             const responseBody = response.data;
 
             const toastLogic = {

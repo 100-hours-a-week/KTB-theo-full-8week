@@ -109,10 +109,11 @@ export class Api {
 
         const response = await fetch(url, options);
 
-        const result = response;
+        const hasBody = this.#method !== 'DELETE';
 
-        if (this.#method !== 'DELETE') {
-            return await result.json();
+        let jsonData = null;
+        if (hasBody) {
+            jsonData = await response.json();
         }
 
         // 4XX, 5XX 응답
@@ -126,7 +127,11 @@ export class Api {
             );
         }
 
+        if (!hasBody) {
+            return response;
+        }
+
         // 2XX 응답
-        return result;
+        return jsonData;
     }
 }

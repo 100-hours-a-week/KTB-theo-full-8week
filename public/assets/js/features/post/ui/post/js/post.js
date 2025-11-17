@@ -6,6 +6,7 @@ import { apiPath } from "../../../../../shared/path/apiPath.js";
 import { commentCardList } from "./comment-card-list.js";
 import { ApiError } from "../../../../../shared/lib/api-error.js";
 import { modal } from "../../../../../shared/ui/modal/js/modal.js";
+import { editPost } from "../../edit-post/js/edit-post.js";
 
 activeFeatureCss(cssPath.POST_CSS_PATH);
 
@@ -15,7 +16,7 @@ export async function post(postId) {
 
     const { id, title, authorNickname,
         article, articleImage, authorImage,
-        commentCount, createdAt, hit, like } = postDetail;
+        commentCount, createdAt, hit, like, category } = postDetail;
 
     let isLiking = false;
     const root = document.createElement('div');
@@ -90,10 +91,7 @@ export async function post(postId) {
         await handlePostLikeRequest()
     })
 
-    postDeleteButton.addEventListener('click', () => {
-        handlePostDelete()
-    })
-
+    // 게시글 삭제 확인 모달창 핸들러
     function handlePostDelete() {
         const handleCancelChoice = function () {
 
@@ -114,17 +112,41 @@ export async function post(postId) {
         const modalComponent = modal(modalLogic);
         root.appendChild(modalComponent);
     }
-    // 댓글 생성 시 댓글 수 증가
-    eventBus.addEventListener('post:createComment', (event, options) => {
+
+
+    // 댓글 생성 시 댓글 수 증가 핸들러
+    const handleCreateComment = (event) => {
         const nowCommentCount = Number(commentCountLabel.textContent);
         commentCountLabel.textContent = nowCommentCount + 1;
-    })
-
-    eventBus.addEventListener('post:deleteComment', (event, options) => {
+    };
+    // 댓글 삭제 시 댓글 수 감소 핸들러
+    const handleDeleteComment = (event) => {
         const nowCommentCount = Number(commentCountLabel.textContent);
         commentCountLabel.textContent = nowCommentCount - 1;
+    };
+
+    // 댓글 생성 시 댓글 수 증가 이벤트
+    eventBus.addEventListener('post:createComment', handleCreateComment)
+
+    // 댓글 삭제 시 댓글 수 감소 이벤트
+    eventBus.addEventListener('post:deleteComment', handleDeleteComment)
+
+
+    postUpdateButton.addEventListener('click', (event) => {
+        event.preventDefault();
+
+        eventBus.removeEventListener('post:createComment', handleCreateComment);
+        eventBus.removeEventListener('post:deleteComment', handleDeleteComment);
+
+        const editPostComponent = editPost({ id, title, article, articleImage, category });
+        root.innerHTML = '';
+        root.appendChild(editPostComponent);
     })
 
+    postDeleteButton.addEventListener('click', (event) => {
+        event.preventDefault();
+        handlePostDelete()
+    })
     // 게시글 좋아요 클릭 핸들러
     async function handlePostLikeRequest() {
         if (isLiking) return;
