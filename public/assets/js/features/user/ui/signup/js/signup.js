@@ -5,6 +5,7 @@ import { cssPath } from "../../../../../shared/path/cssPath.js";
 import { navigate } from "../../../../../shared/lib/router.js";
 import { ApiError } from "../../../../../shared/lib/api-error.js";
 import { isEmail, isValidPasswordPattern, isBetweenLength, isBlank, isOverMaxLength, isFile } from "../../../../../shared/lib/util/util.js";
+import { toast } from "../../../../../shared/ui/toast/toast.js";
 
 activeFeatureCss(cssPath.SIGNUP_CSS_PATH);
 
@@ -338,8 +339,16 @@ export function signup() {
         try {
             const response = await requestSignup();
             const responseBody = response.data;
-            alert('회원가입 성공')
-            navigate('/login');
+            const toastLogic = {
+                title: "회원가입이 완료되었습니다.",
+                buttonTitle: "로그인 화면으로 이동",
+                buttonLogic: function () {
+                    navigate('/logout');
+                }
+            }
+            const toastComponent = toast(toastLogic);
+            root.appendChild(toastComponent);
+
         } catch (error) {
             if (error instanceof ApiError) {
                 // handleSignupFail(error);

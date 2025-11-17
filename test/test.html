@@ -8,11 +8,26 @@
     <script src="./test.js"></script>
     <title>Document</title>
 </head>
-<div class="toast-container">
-    <div class="toast-wrapper">
-        <h2 class="toast-title">수정 완료</h2>
-        <button class="toast-btn">닫기</button>
+<div class="edit-password-container">
+    <div class="edit-password-wrapper">
+        <h2>비밀번호 수정</h2>
+        <form id="edit-password-form">
+            <div class="edit-password-field">
+                <label class="edit-password-label" for="edit-password-form-email">비밀번호</label>
+                <input id="edit-password-form-password" name="password" type="password" class="edit-password-input"
+                    required placeholder="비밀번호를 입력하세요" />
+            </div>
+            <p id="edit-password-origin" class="edit-password-form-helper-text">*helper-text</p>
+            <div class="edit-password-field">
+                <label class="edit-password-label" for="edit-password-form-password">비밀번호 확인</label>
+                <input id="edit-password-form-password-confirm" name="password-confirm" type="password"
+                    class="edit-password-input" required placeholder="비밀번호를 한 번 더 입력하세요" />
+            </div>
+            <p id="edit-password-confirm" class="edit-password-form-helper-text">*helper-text</p>
+            <button id="edit-password-btn" type='submit' disabled>수정하기</button>
+        </form>
     </div>
+</div>
 </div>
 
 

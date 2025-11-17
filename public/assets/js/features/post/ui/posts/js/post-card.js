@@ -39,7 +39,8 @@ export function postCard(post) {
     const postCardViewCount = root.querySelector('.post-card-summary-viewcount');
 
     // Post Card 클릭 시, Post 상세화면 전환 이벤트
-    root.addEventListener('click', () => {
+    root.addEventListener('click', (event) => {
+        event.preventDefault();
         const postId = id;
         emit('post:postCardClick', { postId });
     })

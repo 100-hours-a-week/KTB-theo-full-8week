@@ -3,6 +3,7 @@ import { cssPath } from "../../../path/cssPath.js";
 import { apiPath } from "../../../path/apiPath.js";
 import { goBack, navigate } from "../../../lib/router.js";
 import { eventBus } from "../../../lib/eventBus.js";
+import { modal } from "../../modal/js/modal.js";
 
 activeCommonCss(cssPath.COMMON_HEADER_CSS_PATH);
 
@@ -117,7 +118,19 @@ export function commonHeader() {
                 navigate('/editPassword');
                 break;
             case "logout":
-                navigate('/logout');
+                const handleCancelChoice = function () {
+                }
+                const handleConfirmChoice = async function () {
+                    navigate('/logout');
+                }
+                const modalLogic = {
+                    title: "로그아웃 하시겠습니까?",
+                    detail: "로그인 화면으로 이동합니다.",
+                    cancelLogic: handleCancelChoice,
+                    confirmLogic: handleConfirmChoice,
+                }
+                const modalComponent = modal(modalLogic);
+                root.appendChild(modalComponent);
                 break;
         }
         closeMenu();

@@ -5,6 +5,7 @@ import { Api } from "../../../../../shared/lib/api.js";
 import { apiPath } from "../../../../../shared/path/apiPath.js";
 import { ApiError } from "../../../../../shared/lib/api-error.js";
 import { navigate } from "../../../../../shared/lib/router.js";
+import { toast } from "../../../../../shared/ui/toast/toast.js";
 
 activeFeatureCss(cssPath.MAKE_POST_CSS_PATH);
 
@@ -166,8 +167,16 @@ export function makePost() {
         try {
             const response = await requestMakePost();
             const responseBody = response.data;
-            alert('게시글 생성 성공!');
-            navigate('/post');
+
+            const toastLogic = {
+                title: "게시글을 생성했습니다.",
+                buttonTitle: "게시글 목록 화면으로 이동",
+                buttonLogic: function () {
+                    navigate('/post');
+                }
+            }
+            const toastComponent = toast(toastLogic);
+            root.appendChild(toastComponent);
 
         } catch (error) {
             if (error instanceof ApiError) {

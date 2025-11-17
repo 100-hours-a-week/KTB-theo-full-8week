@@ -4,6 +4,7 @@ import { signup } from "../../features/user/ui/signup/js/signup.js";
 import { postCardList } from "../../features/post/ui/posts/js/post-card-list.js";
 import { makePost } from "../../features/post/ui/make-post/js/make-post.js";
 import { editProfile } from "../../features/user/ui/edit-profile/js/edit-profile.js";
+import { editPassword } from "../../features/user/ui/edit-password/js/edit-password.js";
 import { post } from "../../features/post/ui/post/js/post.js";
 
 let history = ['/'];
@@ -15,7 +16,8 @@ const routes = [
     { path: "/signup", render: signup },
     { path: "/post", render: postCardList },
     { path: "/makepost", render: makePost },
-    { path: "/editProfile", render: editProfile }
+    { path: "/editProfile", render: editProfile },
+    { path: "/editPassword", render: editPassword }
 ]
 
 // 경로 들어오면 배열에서 Path값 비교해서 맞는 라우터 찾고 없으면 시작 페이지로 이동

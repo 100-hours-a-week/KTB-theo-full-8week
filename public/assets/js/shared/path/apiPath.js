@@ -14,7 +14,8 @@ export const apiPath = {
     EDIT_USER_URL: '/user',
     EAMIL_DOUBLE_CHECK_URL: '/user/email/double-check',
     NICKNAME_DOUBLE_CHECK_URL: '/user/nickname/double-check',
-    NICKNAME_EDIT_URL: (userId) => { return `/user/${userId}/nickname` },
+    NICKNAME_EDIT_URL: (userId) => `/user/${userId}/nickname`,
+    EDIT_PASSWORD_API_URL: (userId) => `/user/${userId}/password`,
     DELETE_USER_URL: '/user',
 
     //Post
