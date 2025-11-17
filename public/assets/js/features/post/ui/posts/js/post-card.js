@@ -1,5 +1,5 @@
 import { activeFeatureCss } from "../../../../../shared/lib/dom.js";
-import { emit } from "../../../../../shared/lib/eventBus.js";
+import { emit, eventBus } from "../../../../../shared/lib/eventBus.js";
 import { apiPath } from "../../../../../shared/path/apiPath.js";
 import { cssPath } from "../../../../../shared/path/cssPath.js";
 
@@ -34,10 +34,23 @@ export function postCard(post) {
         </div>
         `;
 
+    const postCardLikeCount = root.querySelector('.post-card-summary-like');
+    const postCardCommentCount = root.querySelector('.post-card-summary-comment');
+    const postCardViewCount = root.querySelector('.post-card-summary-viewcount');
 
+    // Post Card 클릭 시, Post 상세화면 전환 이벤트
     root.addEventListener('click', () => {
         const postId = id;
         emit('post:postCardClick', { postId });
     })
+
+    // 게시글 조회 수, 좋아요 수, 댓글 수 변동 시 PostCard 동기화
+    eventBus.addEventListener(`post:updatePostCard/${id}`, (event, options) => {
+        const { nowCommentCount, nowViewCount, nowLikeCount } = event.detail;
+        postCardLikeCount.textContent = `좋아요 ${nowLikeCount}`;
+        postCardCommentCount.textContent = `댓글 ${nowCommentCount}`;
+        postCardViewCount.textContent = `조회 수 ${nowViewCount}`;
+    })
+
     return root;
 }

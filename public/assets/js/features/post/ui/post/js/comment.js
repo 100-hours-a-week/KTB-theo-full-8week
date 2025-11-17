@@ -3,6 +3,7 @@ import { cssPath } from "../../../../../shared/path/cssPath.js";
 import { apiPath } from "../../../../../shared/path/apiPath.js";
 import { Api } from "../../../../../shared/lib/api.js";
 import { emit } from "../../../../../shared/lib/eventBus.js";
+import { modal } from "../../../../../shared/ui/modal/js/modal.js";
 
 activeFeatureCss(cssPath.COMMENT_CSS_PATH);
 
@@ -48,13 +49,31 @@ export function comment(commentData, postId) {
         })
     })
 
-
     // 댓글 삭제 버튼 이벤트 등록
-    commentDeleteButton.addEventListener('click', async () => {
-        const response = await requestCommentDelete(postId, id);
-        emit('post:deleteComment', { element: root });
+    commentDeleteButton.addEventListener('click', () => {
+        handleCommentDelete();
     })
 
+    // 댓글 삭제 모달창 핸들러
+    function handleCommentDelete() {
+        const handleCancelChoice = function () {
+
+        }
+        const handleConfirmChoice = async function () {
+            await requestCommentDelete(postId, id);
+            emit('post:deleteComment', { element: root });
+        }
+
+        const modalLogic = {
+            title: "댓글을 삭제하시겠습니까?",
+            detail: "삭제한 내용은 복구할 수 없습니다.",
+            cancelLogic: handleCancelChoice,
+            confirmLogic: handleConfirmChoice,
+        }
+
+        const modalComponent = modal(modalLogic);
+        root.appendChild(modalComponent)
+    }
 
     // 댓글 삭제 API 요청
     async function requestCommentDelete(postId, commentId) {

@@ -5,7 +5,7 @@ import { ApiError } from "../../../../../shared/lib/api-error.js";
 import { postCard } from "./post-card.js";
 import { postCardListHeader } from "./post-card-list-header.js";
 import { apiPath } from "../../../../../shared/path/apiPath.js";
-import { eventBus } from "../../../../../shared/lib/eventBus.js";
+import { emit, eventBus } from "../../../../../shared/lib/eventBus.js";
 import { post } from "../../post/js/post.js";
 
 activeFeatureCss(cssPath.POST_CARD_LIST_CSS_PATH);
@@ -62,6 +62,18 @@ export function postCardList() {
         detailSection.classList.remove('active');
         detailSection.innerHTML = '';
         listSection.classList.add('active');
+        const { postId, nowCommentCount, nowViewCount, nowLikeCount } = event.detail;
+        emit(`post:updatePostCard/${postId}`, { nowCommentCount, nowViewCount, nowLikeCount });
+    })
+
+    // 게시글 삭제 시 post Card List에서 삭제
+    eventBus.addEventListener('post:deletePost', (event, options) => {
+        const deletedPostId = event.detail.postId;
+        const deletedPostContainer = detailSection.querySelector(`#post-container-${deletedPostId}`);
+        detailSection.removeChild(deletedPostContainer);
+        listSection.classList.add('active');
+        const deletedPostCard = listSection.querySelector(`#post-card-${deletedPostId}`);
+        listSection.removeChild(deletedPostCard);
     })
 
     // 무한 스크롤용 옵저버 추가

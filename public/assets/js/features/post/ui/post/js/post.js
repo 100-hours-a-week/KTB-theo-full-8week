@@ -5,6 +5,7 @@ import { Api } from "../../../../../shared/lib/api.js";
 import { apiPath } from "../../../../../shared/path/apiPath.js";
 import { commentCardList } from "./comment-card-list.js";
 import { ApiError } from "../../../../../shared/lib/api-error.js";
+import { modal } from "../../../../../shared/ui/modal/js/modal.js";
 
 activeFeatureCss(cssPath.POST_CSS_PATH);
 
@@ -18,7 +19,7 @@ export async function post(postId) {
 
     let isLiking = false;
     const root = document.createElement('div');
-    root.className = `post-container ${id}`;
+    root.id = `post-container-${id}`;
     root.innerHTML =
         `
         <div class="post-wrapper">
@@ -67,22 +68,52 @@ export async function post(postId) {
         `;
     root.appendChild(commentCardList(id));
 
-
     const backToListButton = root.querySelector('#post-back-btn');
     const likeBox = root.querySelector('.post-article-like-box');
     const postLikeLabel = root.querySelector('#post-article-like');
+    const postViewCountLabel = root.querySelector('#post-article-viewcount');
     const commentCountLabel = root.querySelector('#post-article-comment-count');
+    const postUpdateButton = root.querySelector('#post-update-btn');
+    const postDeleteButton = root.querySelector('#post-delete-btn');
 
     // 뒤로 가기 버튼
     backToListButton.addEventListener('click', () => {
-        emit('post:backToList');
+        const nowCommentCount = Number(commentCountLabel.textContent);
+        const nowViewCount = Number(postViewCountLabel.textContent);
+        const nowLikeCount = Number(postLikeLabel.textContent);
+        emit('post:backToList', { postId, nowCommentCount, nowViewCount, nowLikeCount });
     })
 
+    // 게시글 좋아요 클릭 이벤트
     likeBox.addEventListener('click', async (event) => {
         event.preventDefault();
         await handlePostLikeRequest()
     })
 
+    postDeleteButton.addEventListener('click', () => {
+        handlePostDelete()
+    })
+
+    function handlePostDelete() {
+        const handleCancelChoice = function () {
+
+        }
+
+        const handleConfirmChoice = async function () {
+            await requestPostDelete(postId)
+            emit('post:deletePost', { postId });
+        }
+
+        const modalLogic = {
+            title: "게시글을 삭제하시겠습니까?",
+            detail: "삭제한 내용은 복구할 수 없습니다.",
+            cancelLogic: handleCancelChoice,
+            confirmLogic: handleConfirmChoice,
+        }
+
+        const modalComponent = modal(modalLogic);
+        root.appendChild(modalComponent);
+    }
     // 댓글 생성 시 댓글 수 증가
     eventBus.addEventListener('post:createComment', (event, options) => {
         const nowCommentCount = Number(commentCountLabel.textContent);
@@ -153,6 +184,17 @@ export async function post(postId) {
             .post()
             .url(apiPath.POST_LIKE_CANCEL_API_URL(postId))
             .body({ userId })
+            .print()
+            .request();
+
+        return response;
+    }
+
+    // 4. 게시글 삭제 요청 API
+    async function requestPostDelete(postId) {
+        const response = await new Api()
+            .delete()
+            .url(apiPath.DELETE_POST_API_URL(postId))
             .print()
             .request();
 

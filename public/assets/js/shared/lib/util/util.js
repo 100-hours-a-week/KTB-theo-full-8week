@@ -26,18 +26,13 @@ export function isFile(file) {
 
 export function getNowData() {
     const now = new Date();
-    const koreaTimeDiff = 9 * 60 * 60 * 1000;
-    const utc = now.getDate() + (now.getTimezoneOffset() * 60 * 1000);
 
-    const today = new Date(utc + koreaTimeDiff);
-    const year = today.getFullYear();
-    const month = ('0' + today.getMonth()).padStart(2, '0');
-    const day = ('0' + today.getDate()).padStart(2, '0');
-    const hours = ('0' + today.getHours()).padStart(2, '0');
-    const minutes = ('0' + today.getMinutes()).padStart(2, '0');
-    const second = ('0' + today.getSeconds()).padStart(2, '0');
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const seconds = String(now.getSeconds()).padStart(2, '0');
 
-    const nowDate = `${year}-${month}-${day} ${hours}:${minutes}:${second}`;
-
-    return nowDate;
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 }

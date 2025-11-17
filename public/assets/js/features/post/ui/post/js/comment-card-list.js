@@ -48,7 +48,6 @@ export function commentCardList(postId) {
     const commentTextArea = root.querySelector('#comment-form-content');
     const commentCreateButton = root.querySelector('#comment-form-create-btn');
     const commentUpdateButton = root.querySelector('#comment-form-update-btn');
-    // commentUpdateButton.style.display = 'none';
     const commentListWrapper = root.querySelector('.comment-card-list-wrapper');
 
     // 댓글 생성 버튼 클릭 이벤트
@@ -119,6 +118,7 @@ export function commentCardList(postId) {
         }
     }
 
+    // 수정 모드 초기화
     function resetEditMode() {
         isEditMode = false;
         editingCommentId = null;
@@ -131,7 +131,7 @@ export function commentCardList(postId) {
 
         activeCommentSubmitButton();
     }
-    // 댓들 생성 요청 핸들러
+    // 댓글 생성 요청 핸들러
     async function handleCreateCommentRequest() {
         if (commentCreateButton.disabled) return;
 
