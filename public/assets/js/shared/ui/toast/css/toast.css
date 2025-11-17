@@ -19,7 +19,7 @@
     text-align: center;
 }
 
-.toast-btn {
+#toast-btn {
     border: transparent;
     padding: 2% 4%;
     width: 40%;

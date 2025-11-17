@@ -7,6 +7,7 @@ import { ApiError } from "../../../../../shared/lib/api-error.js";
 import { emit } from "../../../../../shared/lib/eventBus.js";
 import { navigate } from "../../../../../shared/lib/router.js";
 import { modal } from "../../../../../shared/ui/modal/js/modal.js";
+import { toast } from "../../../../../shared/ui/toast/toast.js";
 
 activeFeatureCss(cssPath.EDIT_PROFILE_CSS_PATH);
 
@@ -178,18 +179,24 @@ export async function editProfile() {
 
         try {
             const userId = currentUser.id;
-            const oldFilePath = localStorage.getItem('profileImage');
+            const oldFileName = localStorage.getItem('profileImage');
             const profileImage = profileImageInput.files[0];
             const nickname = String(nicknameInput.value).trim();
 
-            const response = await requestProfileEdit(userId, oldFilePath, profileImage, nickname);
+            const response = await requestProfileEdit(userId, oldFileName, profileImage, nickname);
             const responseBody = response.data;
 
-
-            const newProfileImageUrl = responseBody.profileImage;
-            localStorage.setItem('profileImage', newProfileImageUrl);
-            emit('user:editProfile', { newProfileImageUrl });
+            const newProfileImage = responseBody.profileImage;
+            localStorage.setItem('profileImage', newProfileImage);
+            emit('user:editProfile', { newProfileImage });
             // 토스트 메시지 띄우기
+            const toastLogic = {
+                title: "수정 완료",
+                buttonTitle: "닫기",
+                buttonLogic: function () { }
+            }
+            const toastComponent = toast(toastLogic);
+            root.appendChild(toastComponent);
 
         } catch (error) {
             if (error instanceof ApiError) {
@@ -248,19 +255,20 @@ export async function editProfile() {
     }
 
     // 3. 회원 프로필 수정 요청 API
-    async function requestProfileEdit(userId, oldFilePath, profileImage, nickname) {
+    async function requestProfileEdit(userId, oldFileName, profileImage, nickname) {
 
         const response = await new Api()
             .patch()
             .url(`${apiPath.EDIT_USER_URL}/${userId}`)
             .body({
                 nickname: nickname,
-                oldFilePath: oldFilePath,
+                oldFileName: oldFileName,
                 profileImage: profileImage,
             })
             .toFormData()
             .print()
-            .request()
+            .request();
+
         return response;
     }
 
