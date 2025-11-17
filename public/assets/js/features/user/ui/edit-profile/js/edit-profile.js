@@ -97,13 +97,14 @@ export async function editProfile() {
         navigate('/post');
     })
 
+    // 회원탈퇴하기 버튼 클릭시 모달 창 렌더링
     unsubscribeLink.addEventListener('click', () => {
         handleUnsubscribeUser();
     })
 
 
     // 핸들러 함수
-    // 프로필 업데이트 활성화 함수
+    // 1. 프로필 업데이트 활성화 함수
     function activeProfileUpdateButton() {
         const nickname = String(nicknameInput.value).trim();
         const isFilled = !isBlank(nickname);
@@ -121,7 +122,7 @@ export async function editProfile() {
         profileUpdateButton.disabled = !canActive;
     }
 
-    // 닉네임 유효성 검증 핸들러
+    // 2. 닉네임 유효성 검증 핸들러
     function handleInvalidNicknamePattern() {
         const nickname = (nicknameInput.value).trim();
 
@@ -139,7 +140,7 @@ export async function editProfile() {
         return true;
     }
 
-    // 닉네임 중복 검사 핸들러
+    // 3. 닉네임 중복 검사 핸들러
     async function handleNicknameDuplication() {
         const nickname = String(nicknameInput.value).trim();
 
@@ -158,7 +159,7 @@ export async function editProfile() {
         return true;
     }
 
-    // 프로필 이미지 변경 핸들러
+    // 4. 프로필 이미지 변경 핸들러
     function handleProfileImageInput() {
         const file = profileImageInput.files[0];
         if (!isFile(file)) {
@@ -173,7 +174,7 @@ export async function editProfile() {
         return true;
     }
 
-    // 회원 프로필 수정 요청 핸들러
+    // 5. 회원 프로필 수정 요청 핸들러
     async function handleEditProfileRequest() {
         if (profileUpdateButton.disabled) return;
 
@@ -208,7 +209,7 @@ export async function editProfile() {
         }
     }
 
-    // 회원 탈퇴 모달창 핸들러
+    // 6. 회원 탈퇴 모달창 핸들러
     function handleUnsubscribeUser() {
         const handleCancelChoice = function () {
         }
@@ -235,7 +236,7 @@ export async function editProfile() {
         const userId = localStorage.getItem('currentUserId');
         const response = await new Api()
             .get()
-            .url(`${apiPath.FIND_USER_URL}/${userId}`)
+            .url(`${apiPath.FIND_USER_API_URL}/${userId}`)
             .print()
             .request();
         return response;
@@ -245,7 +246,7 @@ export async function editProfile() {
     async function requestNicknameDuplication(nickname) {
         const response = await new Api()
             .post()
-            .url(apiPath.NICKNAME_DOUBLE_CHECK_URL)
+            .url(apiPath.NICKNAME_DOUBLE_CHECK_API_URL)
             .body({
                 nickname: nickname
             })
@@ -259,7 +260,7 @@ export async function editProfile() {
 
         const response = await new Api()
             .patch()
-            .url(`${apiPath.EDIT_USER_URL}/${userId}`)
+            .url(`${apiPath.EDIT_USER_API_URL}/${userId}`)
             .body({
                 nickname: nickname,
                 oldFileName: oldFileName,
@@ -276,7 +277,7 @@ export async function editProfile() {
     async function requestDeleteUser(userId) {
         const response = await new Api()
             .delete()
-            .url(`${apiPath.DELETE_USER_URL}/${userId}`)
+            .url(`${apiPath.DELETE_USER_API_URL}/${userId}`)
             .print()
             .request()
 

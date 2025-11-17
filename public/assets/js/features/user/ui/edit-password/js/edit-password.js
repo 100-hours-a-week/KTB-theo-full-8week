@@ -40,6 +40,7 @@ export function editPassword() {
     const passwordEditButton = root.querySelector('#edit-password-btn');
     const helperTexts = {};
 
+    // 헬퍼 텍스트 간소화
     root.querySelectorAll('.edit-password-form-helper-text')
         .forEach((element) => {
             const helperClass = Array.from(element.classList)
@@ -69,8 +70,8 @@ export function editPassword() {
         activePasswordEditButton();
     })
 
-
-    // 비밀번호 수정 버튼 활성화
+    // 핸들러 함수
+    // 1. 비밀번호 수정 버튼 활성화
     function activePasswordEditButton() {
         const password = String(passwordInput.value).trim();
         const passwordConfirm = String(passwordConfirmInput.value).trim();
@@ -90,7 +91,7 @@ export function editPassword() {
         passwordEditButton.disabled = !canActive;
     }
 
-    // 비밀번호 입력 검증 핸들러
+    // 2. 비밀번호 입력 검증 핸들러
     function handlePasswordInput() {
         const password = String(passwordInput.value).trim();
         const passwordConfirm = String(passwordConfirmInput.value).trim();
@@ -114,7 +115,7 @@ export function editPassword() {
         return true;
     }
 
-    // 비밀번호 확인 입력 검증 핸들러
+    // 3. 비밀번호 확인 입력 검증 핸들러
     function handlePasswordConfirmInput() {
         const password = String(passwordInput.value).trim();
         const passwordConfirm = String(passwordConfirmInput.value).trim();
@@ -133,7 +134,7 @@ export function editPassword() {
         return true;
     }
 
-    // 비밀번호 수정 요청 핸들러
+    // 4. 비밀번호 수정 요청 핸들러
     async function handleEditPasswordRequest() {
         if (passwordEditButton.disabled) return;
 

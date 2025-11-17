@@ -155,8 +155,8 @@ export function signup() {
         navigate('/login');
     })
 
-
-    // 회원가입 버튼 활성화
+    // 핸들러 함수
+    // 1. 회원가입 버튼 활성화
     function activeSignUpButton() {
         const email = String(emailInput.value).trim();
         const password = String(passwordInput.value).trim();
@@ -186,7 +186,7 @@ export function signup() {
         signupButton.disabled = !canActive;
     }
 
-    // 닉네임 유효성 검증 핸들러
+    // 2. 닉네임 유효성 검증 핸들러
     function handleInvalidNicknamePattern() {
         const nickname = String(nicknameInput.value).trim();
 
@@ -207,7 +207,7 @@ export function signup() {
         return true;
     }
 
-    // 닉네임 중복 검증 핸들러
+    // 3. 닉네임 중복 검증 핸들러
     async function handleNicknameDuplication() {
         const nickname = String(nicknameInput.value).trim();
 
@@ -224,7 +224,7 @@ export function signup() {
         return true;
     }
 
-    // 이메일 중복 검증 핸들러
+    // 4. 이메일 중복 검증 핸들러
     async function handleEmailDuplication() {
         const email = String(emailInput.value).trim();
 
@@ -243,7 +243,7 @@ export function signup() {
 
 
 
-    // 비밀번호와 비밀번호 확인 입력이 같은 지 검증
+    // 5. 비밀번호와 비밀번호 확인 입력이 같은 지 검증
     function handleEqualPasswordInput() {
         const password = String(passwordInput.value).trim();
         const passwordConfirm = String(passwordConfirmInput.value).trim();
@@ -262,7 +262,7 @@ export function signup() {
         return true;
     }
 
-    // 이메일 유효성 검증 핸들러
+    // 6. 이메일 유효성 검증 핸들러
     function handleInvalidEmail() {
         const email = String(emailInput.value).trim();
         if (isBlank(email)) {
@@ -278,7 +278,7 @@ export function signup() {
         return true;
     }
 
-    // 패스워드 유효성 검증 핸들러
+    // 7. 패스워드 유효성 검증 핸들러
     function handleInvalidPassword() {
         const password = String(passwordInput.value).trim();
         if (isBlank(password)) {
@@ -295,7 +295,7 @@ export function signup() {
         return true;
     }
 
-    // 프로필 이미지 첨부 확인 검증 핸들러
+    // 8. 프로필 이미지 첨부 확인 검증 핸들러
     function handleInvalidProfileImage() {
         const profileImage = profileImageInput.files[0];
         if (!profileImage) {
@@ -307,7 +307,7 @@ export function signup() {
         return true;
     }
 
-    // 프로필 이미지 입력 처리 핸들러
+    // 9. 프로필 이미지 입력 처리 핸들러
     function handleProfileImageInput() {
         const file = profileImageInput.files[0];
         profileImageUploadButton.classList.remove('upload');
@@ -332,7 +332,7 @@ export function signup() {
                 <img id="sign-form-preview" src="${url}"/>
             `;
     }
-    // 회원가입 요청 핸들러
+    // 10. 회원가입 요청 핸들러
     async function handleSignupRequest() {
         if (signupButton.disabled) return;
 
@@ -363,7 +363,7 @@ export function signup() {
     async function requestEmailDuplication(email) {
         const response = await new Api()
             .post()
-            .url(apiPath.EAMIL_DOUBLE_CHECK_URL)
+            .url(apiPath.EAMIL_DOUBLE_CHECK_API_URL)
             .body({
                 email: email
             })
@@ -376,7 +376,7 @@ export function signup() {
     async function requestNicknameDuplication(nickname) {
         const respose = await new Api()
             .post()
-            .url(apiPath.NICKNAME_DOUBLE_CHECK_URL)
+            .url(apiPath.NICKNAME_DOUBLE_CHECK_API_URL)
             .body({
                 nickname: nickname
             })
@@ -391,7 +391,7 @@ export function signup() {
 
         const response = await new Api()
             .post()
-            .url(apiPath.SIGNUP_URL)
+            .url(apiPath.SIGNUP_API_URL)
             .body({
                 email: emailInput.value,
                 password: passwordInput.value,

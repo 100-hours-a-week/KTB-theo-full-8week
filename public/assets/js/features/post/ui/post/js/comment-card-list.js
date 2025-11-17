@@ -19,10 +19,13 @@ export function commentCardList(postId) {
     // 페이지 로딩 플래그
     let isLoading = false;
 
-
+    // 수정모드 여부
     let isEditMode = false;
+    // 현재 수정중인 댓글 PK
     let editingCommentId = null;
+    // 현재 수정중인 댓글 엘리먼트
     let editingCommentElement = null;
+
     const root = document.createElement('div');
     root.className = 'comment-card-list-container';
     root.innerHTML =
@@ -36,13 +39,16 @@ export function commentCardList(postId) {
             </div>
             </form>
         </div>
-        `
+        `;
+
+    // 옵저버 감지 대상 박스 생성 - sentinel
     const sentinel = document.createElement('div');
     sentinel.className = 'comment-card-list-sentinel';
     root.appendChild(sentinel);
 
-    addObserver();
-    loadNextPage();
+
+    addObserver(); // 옵저버 등록
+    loadNextPage(); // 초기 페이지 렌더링
 
     const form = root.querySelector('#comment-form');
     const commentTextArea = root.querySelector('#comment-form-content');
@@ -93,7 +99,8 @@ export function commentCardList(postId) {
         activeCommentSubmitButton();
     })
 
-    // 댓글 업데이트 요청 핸들러
+    // 핸들러 함수
+    // 1. 댓글 업데이트 요청 핸들러
     async function handleUpdateCommentRequest() {
         if (!isEditMode || !editingCommentId || !editingCommentElement) {
             return;
@@ -118,7 +125,7 @@ export function commentCardList(postId) {
         }
     }
 
-    // 수정 모드 초기화
+    // 2. 수정 모드 초기화
     function resetEditMode() {
         isEditMode = false;
         editingCommentId = null;
@@ -131,7 +138,8 @@ export function commentCardList(postId) {
 
         activeCommentSubmitButton();
     }
-    // 댓글 생성 요청 핸들러
+
+    // 3. 댓글 생성 요청 핸들러
     async function handleCreateCommentRequest() {
         if (commentCreateButton.disabled) return;
 
@@ -162,7 +170,7 @@ export function commentCardList(postId) {
         }
     }
 
-    // 무한 스크롤용 옵저버 추가
+    // 4. 무한 스크롤용 옵저버 추가
     function addObserver() {
         const observer = new IntersectionObserver(async (entries) => {
             const entry = entries[0];
@@ -174,7 +182,7 @@ export function commentCardList(postId) {
         observer.observe(sentinel);
     }
 
-    // 무한 스크롤 페이지 로딩 함수
+    // 5. 무한 스크롤 페이지 로딩 함수
     async function loadNextPage() {
         try {
             if (isLoading || !hasNext) {
@@ -187,6 +195,7 @@ export function commentCardList(postId) {
             const responseBody = response.data;
             console.log(responseBody);
 
+            // 댓글 컴포넌트 렌더링, 삽입
             const contents = responseBody.contents;
             contents.forEach((item) => {
                 root.insertBefore(comment(item, postId), sentinel);
@@ -205,7 +214,7 @@ export function commentCardList(postId) {
         }
     }
 
-    // 댓글 생성, 수정 버튼 활성화 검사 핸들러
+    // 6. 댓글 생성, 수정 버튼 활성화 검사 핸들러
     function activeCommentSubmitButton() {
         const content = String(commentTextArea.value).trim();
         const isFilled = !isBlank(content);
@@ -223,6 +232,7 @@ export function commentCardList(postId) {
         targetButton.classList.add('active');
         targetButton.disabled = false;
     }
+
     // API 요청 함수
     // 1. 댓글 생성 API 요청
     async function requestCreateComment(postId, userId, content) {

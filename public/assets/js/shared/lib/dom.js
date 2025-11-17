@@ -21,6 +21,7 @@ export function activeFeatureCss(href) {
     }
 }
 
+// 공통 컴포넌트 CSS 적용
 export function activeCommonCss(href) {
     const exists = [...document.styleSheets].some((s) => {
         return s.href.endsWith(href);

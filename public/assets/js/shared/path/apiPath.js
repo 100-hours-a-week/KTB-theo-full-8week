@@ -1,3 +1,4 @@
+// API 요청 경로
 export const apiPath = {
     API_SERVER_URL: 'http://localhost:8080',
 
@@ -9,14 +10,14 @@ export const apiPath = {
     LOGIN_API_URL: '/auth/access/token',
 
     //User
-    SIGNUP_URL: '/user',
-    FIND_USER_URL: '/user',
-    EDIT_USER_URL: '/user',
-    EAMIL_DOUBLE_CHECK_URL: '/user/email/double-check',
-    NICKNAME_DOUBLE_CHECK_URL: '/user/nickname/double-check',
-    NICKNAME_EDIT_URL: (userId) => `/user/${userId}/nickname`,
+    SIGNUP_API_URL: '/user',
+    FIND_USER_API_URL: '/user',
+    EDIT_USER_API_URL: '/user',
+    EAMIL_DOUBLE_CHECK_API_URL: '/user/email/double-check',
+    NICKNAME_DOUBLE_CHECK_API_URL: '/user/nickname/double-check',
+    NICKNAME_EDIT_API_URL: (userId) => `/user/${userId}/nickname`,
     EDIT_PASSWORD_API_URL: (userId) => `/user/${userId}/password`,
-    DELETE_USER_URL: '/user',
+    DELETE_USER_API_URL: '/user',
 
     //Post
     POST_CARD_LIST_API_URL: '/post',

@@ -67,7 +67,6 @@ export class Api {
         });
         return this;
     }
-
     buildURL() {
         if (!this.#url) {
             throw new Error('URL이 필요합니다.');

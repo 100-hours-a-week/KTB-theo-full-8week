@@ -99,7 +99,8 @@ export function editPost(post) {
         }
     })
 
-    // 게시글 수정 요청 버튼 활성화
+    // 핸들러 함수
+    // 1. 게시글 수정 요청 버튼 활성화
     function activeEditPostButton() {
         const title = String(titleInput.value).trim();
         const article = String(articleInput.value).trim();
@@ -116,7 +117,7 @@ export function editPost(post) {
         editPostButton.disabled = !canActive;
     }
 
-    // 게시글 제목, 본문 내용 작성 여부 확인 핸들러
+    // 2. 게시글 제목, 본문 내용 작성 여부 확인 핸들러
     function handleTitleAndArticleBlank() {
         const title = String(titleInput.value).trim();
         const article = String(articleInput.value).trim();
@@ -126,7 +127,7 @@ export function editPost(post) {
         }
     }
 
-    // 게시글 제목 길이 확인 핸들러
+    // 3. 게시글 제목 길이 확인 핸들러
     function handleTitleLength() {
         const title = String(titleInput.value).trim();
         if (isOverMaxLength(title, 26)) {
@@ -136,7 +137,8 @@ export function editPost(post) {
             helperText.textContent = '';
         }
     }
-    // 게시글 수정 요청 핸들러
+
+    // 4. 게시글 수정 요청 핸들러
     async function handleEditPostRequest() {
         if (editPostButton.disabled) return;
 
@@ -161,7 +163,7 @@ export function editPost(post) {
 
 
     // API 요청 함수
-    // 게시글 수정 요청 API
+    // 1. 게시글 수정 요청 API
     async function requestEditPost(postId, title, article, oldFileName, articleImage, category) {
         const response = await new Api()
             .patch()

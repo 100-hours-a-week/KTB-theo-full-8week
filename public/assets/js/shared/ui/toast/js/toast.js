@@ -1,5 +1,5 @@
-import { activeCommonCss } from "../../lib/dom.js";
-import { cssPath } from "../../path/cssPath.js";
+import { activeCommonCss } from "../../../lib/dom.js";
+import { cssPath } from "../../../path/cssPath.js";
 
 activeCommonCss(cssPath.COMMON_TOAST_CSS_PATH);
 

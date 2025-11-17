@@ -36,7 +36,7 @@ export function commonHeader() {
     const backButton = root.querySelector('#common-back-btn');
     const profileButton = root.querySelector('#common-header-profile-btn');
     const profileImage = root.querySelector('#common-header-userprofile');
-    updateProfileImage();
+    updateProfileImage(); // 첫 렌더링간 유저 프로필 이미지 업데이트
 
     // 돌아가기 버튼 이벤트 등록
     backButton.addEventListener('click', () => {
@@ -68,10 +68,12 @@ export function commonHeader() {
         showProfileMenu();
     })
 
+    // 유저 프로필 수정 간 프로필 이미지 변경 시, 헤더 프로필 이미지 반영
     eventBus.addEventListener('user:editProfile', (event, options) => {
         updateProfileImage();
     })
 
+    // 유저 로그아웃 시, 헤더 프로필 이미지 변경 및 메뉴 숨기기
     eventBus.addEventListener('user:logout', (event, options) => {
         updateProfileImage();
         hideProfileMenu();
@@ -93,7 +95,7 @@ export function commonHeader() {
     }
 
 
-    // 드롭다운 메뉴 토들 핸들러
+    // 드롭다운 메뉴 토글 핸들러
     function toggleProfileMenu() {
         const open = menu.hidden;
         menu.hidden = !open;
@@ -118,16 +120,14 @@ export function commonHeader() {
                 navigate('/editpassword');
                 break;
             case "logout":
-                const handleCancelChoice = function () {
-                }
-                const handleConfirmChoice = async function () {
-                    navigate('/logout');
-                }
                 const modalLogic = {
                     title: "로그아웃 하시겠습니까?",
                     detail: "로그인 화면으로 이동합니다.",
-                    cancelLogic: handleCancelChoice,
-                    confirmLogic: handleConfirmChoice,
+                    cancelLogic: function () {
+                    },
+                    confirmLogic: function () {
+                        navigate('/logout');
+                    }
                 }
                 const modalComponent = modal(modalLogic);
                 root.appendChild(modalComponent);

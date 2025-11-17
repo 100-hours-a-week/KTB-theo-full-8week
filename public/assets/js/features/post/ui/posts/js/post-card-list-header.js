@@ -17,6 +17,7 @@ export function postCardListHeader() {
 
     const postCreateButton = root.querySelector('#post-card-create-btn');
 
+    // 게시글 작성 버튼 클릭시, 게시글 작성 페이지로 이동
     postCreateButton.addEventListener('click', (event) => {
         event.preventDefault();
         navigate('/makepost');

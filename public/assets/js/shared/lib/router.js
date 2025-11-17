@@ -6,9 +6,10 @@ import { makePost } from "../../features/post/ui/make-post/js/make-post.js";
 import { editProfile } from "../../features/user/ui/edit-profile/js/edit-profile.js";
 import { editPassword } from "../../features/user/ui/edit-password/js/edit-password.js";
 
-
+// 컴포넌트 히스토리 저장
 let history = ['/'];
 
+// 라우터, 경로 정보 저장
 const routes = [
     { path: "/", render: login },
     { path: "/login", render: login },
@@ -38,10 +39,12 @@ export function navigate(path) {
     history.push(path);
 }
 
+// 뒤로 돌아가기 가능한지
 export function canGoBack() {
     return history.length > 1;
 }
 
+// 뒤로 돌아가기
 export function goBack() {
     if (!canGoBack()) {
         navigate('/');
@@ -52,6 +55,7 @@ export function goBack() {
     renderRoute(previousPath);
 }
 
+// 방문 기록 삭제
 export function clearPathHistory() {
     history = [];
     history.push('/');

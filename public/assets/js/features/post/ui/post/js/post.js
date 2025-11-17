@@ -11,14 +11,15 @@ import { editPost } from "../../edit-post/js/edit-post.js";
 activeFeatureCss(cssPath.POST_CSS_PATH);
 
 export async function post(postId) {
-    const responseBody = await requestPostDetail(postId);
+    const responseBody = await requestPostDetail(postId); // 게시글 상세 조회
     const postDetail = responseBody.data;
 
     const { id, title, authorNickname,
         article, articleImage, authorImage,
         commentCount, createdAt, hit, like, category } = postDetail;
 
-    let isLiking = false;
+
+    let isLiking = false; // 좋아요 누른 상태인지
     const root = document.createElement('div');
     root.id = `post-container-${id}`;
     root.innerHTML =
@@ -91,29 +92,6 @@ export async function post(postId) {
         await handlePostLikeRequest()
     })
 
-    // 게시글 삭제 확인 모달창 핸들러
-    function handlePostDelete() {
-        const handleCancelChoice = function () {
-
-        }
-
-        const handleConfirmChoice = async function () {
-            await requestPostDelete(postId)
-            emit('post:deletePost', { postId });
-        }
-
-        const modalLogic = {
-            title: "게시글을 삭제하시겠습니까?",
-            detail: "삭제한 내용은 복구할 수 없습니다.",
-            cancelLogic: handleCancelChoice,
-            confirmLogic: handleConfirmChoice,
-        }
-
-        const modalComponent = modal(modalLogic);
-        root.appendChild(modalComponent);
-    }
-
-
     // 댓글 생성 시 댓글 수 증가 핸들러
     const handleCreateComment = (event) => {
         const nowCommentCount = Number(commentCountLabel.textContent);
@@ -147,6 +125,8 @@ export async function post(postId) {
         event.preventDefault();
         handlePostDelete()
     })
+
+
     // 게시글 좋아요 클릭 핸들러
     async function handlePostLikeRequest() {
         if (isLiking) return;
@@ -175,6 +155,28 @@ export async function post(postId) {
         } finally {
             isLiking = false;
         }
+    }
+
+    // 게시글 삭제 확인 모달창 핸들러
+    function handlePostDelete() {
+        const handleCancelChoice = function () {
+
+        }
+
+        const handleConfirmChoice = async function () {
+            await requestPostDelete(postId)
+            emit('post:deletePost', { postId });
+        }
+
+        const modalLogic = {
+            title: "게시글을 삭제하시겠습니까?",
+            detail: "삭제한 내용은 복구할 수 없습니다.",
+            cancelLogic: handleCancelChoice,
+            confirmLogic: handleConfirmChoice,
+        }
+
+        const modalComponent = modal(modalLogic);
+        root.appendChild(modalComponent);
     }
 
     // API 요청 함수

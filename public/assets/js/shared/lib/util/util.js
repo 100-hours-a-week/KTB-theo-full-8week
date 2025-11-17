@@ -1,29 +1,36 @@
 import { regex } from "../../regex/regex.js";
 
+// 이메일 표현식 검증
 export function isEmail(email) {
     return Boolean(regex.EMAIL.test(email));
 }
 
+// 패스워드 패턴 매칭 검사
 export function isValidPasswordPattern(password) {
     return Boolean(regex.PASSWORD.test(password));
 }
 
+// 공백 여부 확인
 export function isBlank(str) {
     return !str || str.trim().length === 0;
 }
 
+// 문자열 길이가 max를 넘는지
 export function isOverMaxLength(str, max) {
     return str.length >= max;
 }
 
+// min <= str <= max
 export function isBetweenLength(str, min, max) {
     return (str.length >= min) && (str.length <= max);
 }
 
+// 파일 여부 확인
 export function isFile(file) {
     return file.type.startsWith('image/');
 }
 
+// 현재 날짜 시간 반환 : yyyy-mm-dd hh:mm:ss
 export function getNowData() {
     const now = new Date();
 
