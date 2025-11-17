@@ -1,24 +1,24 @@
 export const cssPath = {
     // Common
-    COMMON_HEADER_CSS_PATH: '/commonheader/css/commonHeader.css',
+    COMMON_HEADER_CSS_PATH: '/common-header/css/common-header.css',
     COMMON_MODAL_CSS_PATH: '/modal/css/modal.css',
 
     // Auth
     LOGIN_CSS_PATH: '/auth/ui/login/css/login.css',
 
     //User
+    EDIT_PROFILE_CSS_PATH: '/user/ui/edit-profile/css/edit-profile.css',
     SIGNUP_CSS_PATH: '/user/ui/signup/css/signup.css',
-    EDIT_PROFILE_CSS_PATH: '/user/ui/editprofile/css/editProfile.css',
 
     //Post
-    POST_CARD_CSS_PATH: '/post/ui/posts/css/postCard.css',
-    POST_CARD_LIST_CSS_PATH: '/post/ui/posts/css/postCardList.css',
-    POST_CARD_LIST_HEADER_CSS_PATH: '/post/ui/posts/css/postCardListHeader.css',
-    MAKE_POST_CSS_PATH: '/post/ui/makepost/css/makePost.css',
+    POST_CARD_CSS_PATH: '/post/ui/posts/css/post-card.css',
+    POST_CARD_LIST_CSS_PATH: '/post/ui/posts/css/post-card-list.css',
+    POST_CARD_LIST_HEADER_CSS_PATH: '/post/ui/posts/css/post-card-list-header.css',
+    MAKE_POST_CSS_PATH: '/post/ui/make-post/css/make-post.css',
     POST_CSS_PATH: '/post/ui/post/css/post.css',
 
     // Comment
-    COMMENT_CARD_LIST_CSS_PATH: '/post/ui/post/css/commentCardList.css',
+    COMMENT_CARD_LIST_CSS_PATH: '/post/ui/post/css/comment-card-list.css',
     COMMENT_CSS_PATH: '/post/ui/post/css/comment.css',
 }
 Object.freeze(cssPath); // ENUM;

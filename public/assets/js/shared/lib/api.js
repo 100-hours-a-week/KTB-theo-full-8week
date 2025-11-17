@@ -108,7 +108,12 @@ export class Api {
         const options = this.buildOptions();
 
         const response = await fetch(url, options);
-        const result = await response.json();
+
+        const result = response;
+
+        if (this.#method !== 'DELETE') {
+            return await result.json();
+        }
 
         // 4XX, 5XX 응답
         if (!response.ok) {

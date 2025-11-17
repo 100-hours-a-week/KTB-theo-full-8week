@@ -1,9 +1,9 @@
 import { login } from "../../features/auth/ui/login/js/login.js"
 import { logout } from "../../features/auth/ui/logout/js/logout.js";
 import { signup } from "../../features/user/ui/signup/js/signup.js";
-import { postCardList } from "../../features/post/ui/posts/js/postCardList.js";
-import { makePost } from "../../features/post/ui/makePost/js/makePost.js";
-import { editProfile } from "../../features/user/ui/editprofile/js/editProfile.js";
+import { postCardList } from "../../features/post/ui/posts/js/post-card-list.js";
+import { makePost } from "../../features/post/ui/make-post/js/make-post.js";
+import { editProfile } from "../../features/user/ui/edit-profile/js/edit-profile.js";
 import { post } from "../../features/post/ui/post/js/post.js";
 
 let history = ['/'];

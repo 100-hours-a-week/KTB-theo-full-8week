@@ -36,7 +36,7 @@
 
 }
 
-#comment-create-btn {
+#comment-form-create-btn {
     cursor: pointer;
     align-self: flex-end;
 
@@ -50,8 +50,28 @@
     margin-right: 2%;
 }
 
-#comment-create-btn.active {
+#comment-form-create-btn.active {
     cursor: pointer;
     background-color: #7F6AEE;
     
+}
+
+#comment-form-update-btn {
+    cursor: pointer;
+    align-self: flex-end;
+
+    padding: 2% 10%;
+    border: transparent;
+    border-radius: 15px;
+    background-color: #ACA0EB;
+    color: white;
+    font-size: 0.9rem;
+    margin-bottom: 2%;
+    margin-right: 2%;
+    display: none;
+}
+
+#comment-form-update-btn.active {
+    cursor: pointer;
+    background-color: #7F6AEE;
 }

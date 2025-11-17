@@ -5,6 +5,7 @@ import { apiPath } from "../../../../../shared/path/apiPath.js";
 import { isBlank, getNowData } from "../../../../../shared/lib/util/util.js";
 import { comment } from "./comment.js";
 import { ApiError } from "../../../../../shared/lib/api-error.js";
+import { emit, eventBus } from "../../../../../shared/lib/eventBus.js";
 
 activeFeatureCss(cssPath.COMMENT_CARD_LIST_CSS_PATH);
 
@@ -18,6 +19,10 @@ export function commentCardList(postId) {
     // 페이지 로딩 플래그
     let isLoading = false;
 
+
+    let isEditMode = false;
+    let editingCommentId = null;
+    let editingCommentElement = null;
     const root = document.createElement('div');
     root.className = 'comment-card-list-container';
     root.innerHTML =
@@ -26,7 +31,8 @@ export function commentCardList(postId) {
             <form id="comment-form">
             <div class="comment-field" >
                 <textarea id="comment-form-content" placeholder="댓글을 남겨주세요!"></textarea>
-                <button id="comment-create-btn" type="submit">댓글 등록</button>
+                <button id="comment-form-create-btn" type="submit">댓글 등록</button>
+                <button id="comment-form-update-btn" type="submit">댓글 수정</button>
             </div>
             </form>
         </div>
@@ -40,19 +46,92 @@ export function commentCardList(postId) {
 
     const form = root.querySelector('#comment-form');
     const commentTextArea = root.querySelector('#comment-form-content');
-    const commentCreateButton = root.querySelector('#comment-create-btn');
+    const commentCreateButton = root.querySelector('#comment-form-create-btn');
+    const commentUpdateButton = root.querySelector('#comment-form-update-btn');
+    // commentUpdateButton.style.display = 'none';
     const commentListWrapper = root.querySelector('.comment-card-list-wrapper');
 
+    // 댓글 생성 버튼 클릭 이벤트
     form.addEventListener('submit', async (event) => {
         event.preventDefault();
-        await handleCreateCommentRequest();
+
+        if (isEditMode) {
+            await handleUpdateCommentRequest();
+        } else {
+            await handleCreateCommentRequest();
+        }
     })
 
+    // 댓글 입력 창 입력 감지
     commentTextArea.addEventListener('input', () => {
-        activeCommentCreateButton();
+        activeCommentSubmitButton();
     })
 
+    commentTextArea.addEventListener('blur', () => {
+        activeCommentSubmitButton();
+    })
 
+    // 댓글 삭제 이벤트 시 삭제 대상 댓글 컨테이너 삭제
+    eventBus.addEventListener('post:deleteComment', (event, options) => {
+        const deletedComment = event.detail.element;
+        root.removeChild(deletedComment);
+    })
+
+    // 댓글 수정 모드 변경 이벤트 등록
+    eventBus.addEventListener('post:startEditComment', (event, options) => {
+        const { commentId, content, element } = event.detail;
+
+        isEditMode = true;
+        editingCommentId = commentId;
+        editingCommentElement = element;
+
+        commentTextArea.value = content;
+        commentTextArea.focus();
+
+        commentCreateButton.style.display = 'none';
+        commentUpdateButton.style.display = 'inline-block';
+
+        activeCommentSubmitButton();
+    })
+
+    // 댓글 업데이트 요청 핸들러
+    async function handleUpdateCommentRequest() {
+        if (!isEditMode || !editingCommentId || !editingCommentElement) {
+            return;
+        }
+        try {
+            const content = String(commentTextArea.value).trim();
+
+            const response = await requestUpdateComment(postId, editingCommentId, content);
+            const responseBody = response.data;
+
+            const contentEl = editingCommentElement.querySelector('.comment-content');
+            const updatedAtEl = editingCommentElement.querySelector('.comment-updatedat')
+
+            contentEl.textContent = responseBody.content;
+            updatedAtEl.textContent = responseBody.updatedAt;
+
+            resetEditMode();
+        } catch (error) {
+            if (error instanceof ApiError) {
+
+            }
+        }
+    }
+
+    function resetEditMode() {
+        isEditMode = false;
+        editingCommentId = null;
+        editingCommentElement = null;
+
+        commentTextArea.value = '';
+
+        commentUpdateButton.style.display = 'none';
+        commentCreateButton.style.display = 'inline-block';
+
+        activeCommentSubmitButton();
+    }
+    // 댓들 생성 요청 핸들러
     async function handleCreateCommentRequest() {
         if (commentCreateButton.disabled) return;
 
@@ -70,9 +149,16 @@ export function commentCardList(postId) {
                 updatedAt: getNowData(),
                 content: responseBody.content,
             }
-            const newComment = comment(newCommentData);
+            const newComment = comment(newCommentData, postId);
             commentListWrapper.after(newComment);
+            commentTextArea.value = '';
+            emit('post:createComment', {});
         } catch (error) {
+            if (error instanceof ApiError) {
+
+            }
+        } finally {
+            activeCommentSubmitButton();
         }
     }
 
@@ -103,7 +189,7 @@ export function commentCardList(postId) {
 
             const contents = responseBody.contents;
             contents.forEach((item) => {
-                root.insertBefore(comment(item), sentinel);
+                root.insertBefore(comment(item, postId), sentinel);
             });
 
             // 다음 로드 페이지 미리 계산
@@ -119,22 +205,26 @@ export function commentCardList(postId) {
         }
     }
 
-    // 댓글 생성 버튼 활성화 검사 핸들러
-    function activeCommentCreateButton() {
+    // 댓글 생성, 수정 버튼 활성화 검사 핸들러
+    function activeCommentSubmitButton() {
         const content = String(commentTextArea.value).trim();
         const isFilled = !isBlank(content);
 
+        commentCreateButton.classList.remove('active');
+        commentCreateButton.disabled = true;
+        commentUpdateButton.classList.remove('active');
+        commentUpdateButton.disabled = true;
+
         if (!isFilled) {
-            commentCreateButton.classList.remove('active');
-            commentCreateButton.disabled = true;
             return;
         }
 
-        const canActive = isFilled;
-        commentCreateButton.classList.add('active');
-        commentCreateButton.disabled = !canActive;
+        const targetButton = isEditMode ? commentUpdateButton : commentCreateButton;
+        targetButton.classList.add('active');
+        targetButton.disabled = false;
     }
-
+    // API 요청 함수
+    // 1. 댓글 생성 API 요청
     async function requestCreateComment(postId, userId, content) {
         const response = await new Api()
             .post()
@@ -149,7 +239,7 @@ export function commentCardList(postId) {
         return response;
     }
 
-    // 게시글 댓글 조회 API 요청
+    // 2. 게시글 댓글 조회 API 요청
     // start, default Page = 0
     async function requestFindComments(postId, page, size) {
         const response = await new Api()
@@ -162,4 +252,16 @@ export function commentCardList(postId) {
         return response;
     }
     return root;
+
+    // 3. 댓글 수정 API 요청
+    async function requestUpdateComment(postId, commentId, content) {
+        const response = await new Api()
+            .patch()
+            .url(apiPath.UPDATE_COMMENT_API_URL(postId, commentId))
+            .body({ content })
+            .print()
+            .request();
+
+        return response;
+    }
 }

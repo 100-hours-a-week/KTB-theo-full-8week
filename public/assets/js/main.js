@@ -1,5 +1,5 @@
 import { login } from "./features/auth/ui/login/js/login.js";
-import { commonHeader } from "./shared/ui/commonheader/js/commonHeader.js";
+import { commonHeader } from "./shared/ui/common-header/js/common-header.js";
 
 const header = document.getElementById("header");
 const app = document.getElementById("app");

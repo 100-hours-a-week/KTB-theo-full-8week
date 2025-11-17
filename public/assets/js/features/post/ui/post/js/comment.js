@@ -1,10 +1,12 @@
 import { activeFeatureCss } from "../../../../../shared/lib/dom.js";
 import { cssPath } from "../../../../../shared/path/cssPath.js";
 import { apiPath } from "../../../../../shared/path/apiPath.js";
+import { Api } from "../../../../../shared/lib/api.js";
+import { emit } from "../../../../../shared/lib/eventBus.js";
 
 activeFeatureCss(cssPath.COMMENT_CSS_PATH);
 
-export function comment(commentData) {
+export function comment(commentData, postId) {
     console.log("render");
     const { id, authorId, authorNickname, authorProfileImage, updatedAt, content } = commentData;
     const root = document.createElement('div');
@@ -32,5 +34,36 @@ export function comment(commentData) {
             </div>
         </div>
         `;
+
+    const commentUpdateButton = root.querySelector('#comment-update-btn');
+    const commentDeleteButton = root.querySelector('#comment-delete-btn');
+    const contentEl = root.querySelector('.comment-content');
+
+    commentUpdateButton.addEventListener('click', () => {
+        const currentContent = contentEl.textContent;
+        emit('post:startEditComment', {
+            commentId: id,
+            content: currentContent,
+            element: root,
+        })
+    })
+
+
+    // 댓글 삭제 버튼 이벤트 등록
+    commentDeleteButton.addEventListener('click', async () => {
+        const response = await requestCommentDelete(postId, id);
+        emit('post:deleteComment', { element: root });
+    })
+
+
+    // 댓글 삭제 API 요청
+    async function requestCommentDelete(postId, commentId) {
+        const response = await new Api()
+            .delete()
+            .url(apiPath.DELETE_COMMENT_API_URL(postId, commentId))
+            .print()
+            .request();
+        return response;
+    }
     return root;
 }
