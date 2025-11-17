@@ -1,10 +1,9 @@
 import { activeFeatureCss } from "../../../../../shared/lib/dom.js";
 import { cssPath } from "../../../../../shared/path/cssPath.js";
-import { Api } from "../../../../../shared/lib/api.js";
-import { ApiError } from "../../../../../shared/lib/api-error.js";
+import { ApiError } from "../../../../../shared/lib/api/api-error.js";
 import { postCard } from "./post-card.js";
 import { postCardListHeader } from "./post-card-list-header.js";
-import { apiPath } from "../../../../../shared/path/apiPath.js";
+import { requestPostCardList } from "../../../../../shared/lib/api/post-api.js";
 import { emit, eventBus } from "../../../../../shared/lib/eventBus.js";
 import { post } from "../../post/js/post.js";
 
@@ -120,20 +119,6 @@ export function postCardList() {
         } finally {
             isLoading = false;
         }
-    }
-
-
-    // API 요청 함수
-    // 1. 게시글 목록 조회 API 요청
-    // start, default Page = 0
-    async function requestPostCardList(page, size) {
-        const response = await new Api()
-            .get()
-            .url(apiPath.POST_CARD_LIST_API_URL)
-            .queryString({ page, size })
-            .request();
-
-        return response;
     }
 
     return root;

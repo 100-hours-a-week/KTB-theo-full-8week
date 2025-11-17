@@ -1,11 +1,10 @@
 import { activeFeatureCss } from "../../../../../shared/lib/dom.js";
-import { Api } from "../../../../../shared/lib/api.js";
-import { apiPath } from "../../../../../shared/path/apiPath.js";
 import { cssPath } from "../../../../../shared/path/cssPath.js";
+import { ApiError } from "../../../../../shared/lib/api/api-error.js";
 import { navigate } from "../../../../../shared/lib/router.js";
-import { ApiError } from "../../../../../shared/lib/api-error.js";
 import { isEmail, isValidPasswordPattern, isBetweenLength, isBlank, isOverMaxLength, isFile } from "../../../../../shared/lib/util/util.js";
-import { toast } from "../../../../../shared/ui/toast/toast.js";
+import { toast } from "../../../../../shared/ui/toast/js/toast.js";
+import { requestEmailDuplication, requestNicknameDuplication, requestSignup } from "../../../../../shared/lib/api/user-api.js";
 
 activeFeatureCss(cssPath.SIGNUP_CSS_PATH);
 
@@ -94,11 +93,6 @@ export function signup() {
     // 회원 프로필 이미지 첨부 input 태그 이벤트 등록
     profileImageInput.addEventListener('change', () => {
         handleProfileImageInput();
-
-    })
-
-    // 회원 프로필 이미지 input 태그 첨부 여부 확인 이벤트 등록(input)
-    profileImageInput.addEventListener('input', () => {
         handleInvalidProfileImage();
     })
 
@@ -109,9 +103,9 @@ export function signup() {
         activeSignUpButton();
     })
 
-    //  닉네임 input 태그 이벤트 등록(blur)
+    //  이메일 input 태그 이벤트 등록(blur)
     emailInput.addEventListener('blur', async () => {
-        // 닉네임 유효성 검증 완료해야 중복 검사API 요청
+        // 이메일 유효성 검증 완료해야 중복 검사API 요청
         const isValidEmail = handleInvalidEmail();
         if (!isValidEmail) {
             return;
@@ -337,7 +331,12 @@ export function signup() {
         if (signupButton.disabled) return;
 
         try {
-            const response = await requestSignup();
+            const email = String(emailInput.value).trim();
+            const password = String(passwordInput.value).trim();
+            const nickname = String(nicknameInput.value).trim();
+            const profileImage = profileImageInput.files[0];
+
+            const response = await requestSignup(email, password, nickname, profileImage);
             const responseBody = response.data;
             const toastLogic = {
                 title: "회원가입이 완료되었습니다.",
@@ -356,53 +355,6 @@ export function signup() {
         } finally {
             activeSignUpButton();
         }
-    }
-
-    // API 요청 함수
-    // 1. 이메일 중복 검사 요청 API
-    async function requestEmailDuplication(email) {
-        const response = await new Api()
-            .post()
-            .url(apiPath.EAMIL_DOUBLE_CHECK_API_URL)
-            .body({
-                email: email
-            })
-            .request();
-
-        return response;
-    }
-
-    // 2. 닉네임 중복 검사 요청 API
-    async function requestNicknameDuplication(nickname) {
-        const respose = await new Api()
-            .post()
-            .url(apiPath.NICKNAME_DOUBLE_CHECK_API_URL)
-            .body({
-                nickname: nickname
-            })
-            .request();
-
-        return respose;
-    }
-
-    // 3. 회원가입 API 요청
-    async function requestSignup() {
-        signupButton.disabled = true;
-
-        const response = await new Api()
-            .post()
-            .url(apiPath.SIGNUP_API_URL)
-            .body({
-                email: emailInput.value,
-                password: passwordInput.value,
-                nickname: nicknameInput.value,
-                profileImage: profileImageInput.files[0],
-            })
-            .toFormData()
-            .print()
-            .request();
-
-        return response;
     }
     return root;
 }

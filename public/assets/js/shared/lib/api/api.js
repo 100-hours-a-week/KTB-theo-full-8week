@@ -1,6 +1,6 @@
 
 import { ApiError } from "./api-error.js";
-import { apiPath } from "../path/apiPath.js";
+import { apiPath } from "../../path/apiPath.js";
 
 export class Api {
     #method = 'GET';

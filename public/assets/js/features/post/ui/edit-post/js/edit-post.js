@@ -1,11 +1,10 @@
 import { activeFeatureCss } from "../../../../../shared/lib/dom.js";
 import { cssPath } from "../../../../../shared/path/cssPath.js";
-import { Api } from "../../../../../shared/lib/api.js";
-import { apiPath } from "../../../../../shared/path/apiPath.js";
 import { isBlank, isOverMaxLength } from "../../../../../shared/lib/util/util.js";
-import { ApiError } from "../../../../../shared/lib/api-error.js";
-import { toast } from "../../../../../shared/ui/toast/toast.js";
+import { ApiError } from "../../../../../shared/lib/api/api-error.js";
+import { toast } from "../../../../../shared/ui/toast/js/toast.js";
 import { navigate } from "../../../../../shared/lib/router.js";
+import { requestEditPost } from "../../../../../shared/lib/api/post-api.js";
 
 activeFeatureCss(cssPath.EDIT_POST_CSS_PATH);
 
@@ -162,24 +161,6 @@ export function editPost(post) {
     }
 
 
-    // API 요청 함수
-    // 1. 게시글 수정 요청 API
-    async function requestEditPost(postId, title, article, oldFileName, articleImage, category) {
-        const response = await new Api()
-            .patch()
-            .url(apiPath.EDIT_POST_API_URL(postId))
-            .body({
-                title,
-                article,
-                oldFileName,
-                articleImage,
-                category
-            })
-            .toFormData()
-            .print()
-            .request();
 
-        return response;
-    }
     return root;
 }

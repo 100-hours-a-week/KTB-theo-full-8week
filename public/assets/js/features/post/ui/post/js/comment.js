@@ -1,9 +1,9 @@
 import { activeFeatureCss } from "../../../../../shared/lib/dom.js";
 import { cssPath } from "../../../../../shared/path/cssPath.js";
 import { apiPath } from "../../../../../shared/path/apiPath.js";
-import { Api } from "../../../../../shared/lib/api.js";
 import { emit } from "../../../../../shared/lib/eventBus.js";
 import { modal } from "../../../../../shared/ui/modal/js/modal.js";
+import { requestCommentDelete } from "../../../../../shared/lib/api/post-api.js";
 
 activeFeatureCss(cssPath.COMMENT_CSS_PATH);
 
@@ -75,14 +75,5 @@ export function comment(commentData, postId) {
         root.appendChild(modalComponent)
     }
 
-    // 댓글 삭제 API 요청
-    async function requestCommentDelete(postId, commentId) {
-        const response = await new Api()
-            .delete()
-            .url(apiPath.DELETE_COMMENT_API_URL(postId, commentId))
-            .print()
-            .request();
-        return response;
-    }
     return root;
 }

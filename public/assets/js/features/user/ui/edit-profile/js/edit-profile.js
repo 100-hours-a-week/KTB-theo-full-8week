@@ -1,18 +1,19 @@
 import { activeFeatureCss } from "../../../../../shared/lib/dom.js";
 import { apiPath } from "../../../../../shared/path/apiPath.js";
 import { cssPath } from "../../../../../shared/path/cssPath.js";
-import { Api } from "../../../../../shared/lib/api.js";
 import { isBlank, isFile, isOverMaxLength } from "../../../../../shared/lib/util/util.js";
-import { ApiError } from "../../../../../shared/lib/api-error.js";
+import { ApiError } from "../../../../../shared/lib/api/api-error.js";
 import { emit } from "../../../../../shared/lib/eventBus.js";
 import { navigate } from "../../../../../shared/lib/router.js";
 import { modal } from "../../../../../shared/ui/modal/js/modal.js";
-import { toast } from "../../../../../shared/ui/toast/toast.js";
+import { toast } from "../../../../../shared/ui/toast/js/toast.js";
+import { requestCurrentUser, requestNicknameDuplication, requestProfileEdit, requestDeleteUser } from "../../../../../shared/lib/api/user-api.js";
 
 activeFeatureCss(cssPath.EDIT_PROFILE_CSS_PATH);
 
 export async function editProfile() {
-    const responseBody = await requestCurrentUser();
+    const userId = localStorage.getItem('currentUserId');
+    const responseBody = await requestCurrentUser(userId);
     const currentUser = responseBody.data;
     const root = document.createElement('div');
     root.className = 'edit-profile-container';
@@ -35,7 +36,7 @@ export async function editProfile() {
                 <div class="edit-profile-field">
                     <label class="edit-profile-label" for="edit-profile-form-nickname">닉네임</label>
                     <input id="edit-profile-form-nickname" name="nickname" type="text" class="edit-profile-input"
-                        required placeholder="닉네임을 입력하세요" value=${currentUser.nickname}>
+                        required placeholder="닉네임을 입력하세요" value="${currentUser.nickname}">
                     <p class="edit-profile-form-helper-text"></p>
                 </div>
                 <button id="edit-profile-update-btn" type="submit" disabled>수정하기</button>
@@ -49,7 +50,6 @@ export async function editProfile() {
     const profileImageInput = root.querySelector('#edit-profile-form-profile-image');
     const profileImagePreview = root.querySelector('#edit-profile-image-preview');
     const profileImageUploadButton = root.querySelector('#edit-profile-image-upload-btn');
-    const email = root.querySelector('#edit-profile-email');
     const nicknameInput = root.querySelector('#edit-profile-form-nickname');
     const profileUpdateButton = root.querySelector('#edit-profile-update-btn');
     const helpertext = root.querySelector('.edit-profile-form-helper-text')
@@ -230,59 +230,7 @@ export async function editProfile() {
     }
 
 
-    // API 요청 함수
-    // 1. 현재 유저 정보 조회 요청 API
-    async function requestCurrentUser() {
-        const userId = localStorage.getItem('currentUserId');
-        const response = await new Api()
-            .get()
-            .url(`${apiPath.FIND_USER_API_URL}/${userId}`)
-            .print()
-            .request();
-        return response;
-    }
 
-    // 2. 닉네임 중복 검사 요청 API
-    async function requestNicknameDuplication(nickname) {
-        const response = await new Api()
-            .post()
-            .url(apiPath.NICKNAME_DOUBLE_CHECK_API_URL)
-            .body({
-                nickname: nickname
-            })
-            .request();
-
-        return response;
-    }
-
-    // 3. 회원 프로필 수정 요청 API
-    async function requestProfileEdit(userId, oldFileName, profileImage, nickname) {
-
-        const response = await new Api()
-            .patch()
-            .url(`${apiPath.EDIT_USER_API_URL}/${userId}`)
-            .body({
-                nickname: nickname,
-                oldFileName: oldFileName,
-                profileImage: profileImage,
-            })
-            .toFormData()
-            .print()
-            .request();
-
-        return response;
-    }
-
-    // 4. 회원 삭제 요청 API
-    async function requestDeleteUser(userId) {
-        const response = await new Api()
-            .delete()
-            .url(`${apiPath.DELETE_USER_API_URL}/${userId}`)
-            .print()
-            .request()
-
-        return response;
-    }
     return root;
 
 

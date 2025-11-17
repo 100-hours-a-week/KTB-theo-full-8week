@@ -1,3 +1,4 @@
+// CSS 경로 정보
 export const cssPath = {
     // Common
     COMMON_HEADER_CSS_PATH: '/common-header/css/common-header.css',

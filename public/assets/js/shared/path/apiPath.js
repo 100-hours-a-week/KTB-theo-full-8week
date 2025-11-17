@@ -13,7 +13,7 @@ export const apiPath = {
     SIGNUP_API_URL: '/user',
     FIND_USER_API_URL: '/user',
     EDIT_USER_API_URL: '/user',
-    EAMIL_DOUBLE_CHECK_API_URL: '/user/email/double-check',
+    EMAIL_DOUBLE_CHECK_API_URL: '/user/email/double-check',
     NICKNAME_DOUBLE_CHECK_API_URL: '/user/nickname/double-check',
     NICKNAME_EDIT_API_URL: (userId) => `/user/${userId}/nickname`,
     EDIT_PASSWORD_API_URL: (userId) => `/user/${userId}/password`,

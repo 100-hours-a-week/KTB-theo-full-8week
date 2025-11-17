@@ -1,11 +1,10 @@
 import { activeFeatureCss } from "../../../../../shared/lib/dom.js";
 import { cssPath } from "../../../../../shared/path/cssPath.js";
-import { Api } from '../../../../../shared/lib/api.js';
-import { apiPath } from "../../../../../shared/path/apiPath.js";
-import { ApiError } from "../../../../../shared/lib/api-error.js";
+import { ApiError } from "../../../../../shared/lib/api/api-error.js";
 import { navigate } from "../../../../../shared/lib/router.js";
 import { isEmail, isValidPasswordPattern, isBlank, isBetweenLength } from "../../../../../shared/lib/util/util.js";
 import { emit } from "../../../../../shared/lib/eventBus.js";
+import { requestLogin } from "../../../../../shared/lib/api/user-api.js";
 
 activeFeatureCss(cssPath.LOGIN_CSS_PATH);
 
@@ -126,14 +125,15 @@ export function login() {
         if (loginButton.disabled) return;
 
         try {
-            const response = await requestLogin();
+            const email = String(emailInput.value).trim();
+            const password = String(passwordInput.value).trim();
+
+            const response = await requestLogin(email, password);
             const responseBody = response.data;
             const isLoginSuccess = responseBody.loginSuccess;
-            console.log(responseBody)
             const nickname = responseBody.nickname;
             const profileImage = responseBody.profileImage;
 
-            console.log(profileImage)
             if (isLoginSuccess) {
                 // TODO: 로그인 성공 시 게시글 목록화면으로 라우팅 처리 필요
                 localStorage.setItem('currentUserId', responseBody.id);
@@ -153,21 +153,5 @@ export function login() {
         }
     }
 
-    // API 요청 함수
-    // 1. 로그인 API 요청
-    async function requestLogin() {
-        loginButton.disabled = true;
-
-        const response = await new Api()
-            .post()
-            .url(apiPath.LOGIN_API_URL)
-            .body({
-                email: emailInput.value,
-                password: passwordInput.value
-            })
-            .request();
-
-        return response;
-    }
     return root;
 }

@@ -1,11 +1,10 @@
 import { activeFeatureCss } from "../../../../../shared/lib/dom.js";
 import { cssPath } from "../../../../../shared/path/cssPath.js";
 import { isBlank, isOverMaxLength } from "../../../../../shared/lib/util/util.js";
-import { Api } from "../../../../../shared/lib/api.js";
-import { apiPath } from "../../../../../shared/path/apiPath.js";
-import { ApiError } from "../../../../../shared/lib/api-error.js";
+import { ApiError } from "../../../../../shared/lib/api/api-error.js";
 import { navigate } from "../../../../../shared/lib/router.js";
-import { toast } from "../../../../../shared/ui/toast/toast.js";
+import { toast } from "../../../../../shared/ui/toast/js/toast.js";
+import { requestMakePost } from "../../../../../shared/lib/api/post-api.js";
 
 activeFeatureCss(cssPath.MAKE_POST_CSS_PATH);
 
@@ -83,27 +82,6 @@ export function makePost() {
 
 
 
-    // API 요청 함수
-    // 1. 게시글 생성 요청
-    async function requestMakePost(authorId, title, article, category) {
-        if (makePostButton.disabled) return;
-
-        let body = { authorId, title, article, category }
-
-        if (articleImageInput.files && articleImageInput.files.length > 0) {
-            body = { ...body, articleImage: articleImageInput.files[0] }
-        }
-
-        const response = await new Api()
-            .post()
-            .url(apiPath.MAKE_POST_API_URL)
-            .body(body)
-            .toFormData()
-            .request();
-
-        return response;
-    }
-
     // 이벤트 리스너 콜백 함수
     // 1. 게시글 등록 버튼 활성화 핸들러
     function activeMakePostButton() {
@@ -154,14 +132,14 @@ export function makePost() {
     async function handleMakePostRequest() {
         if (makePostButton.disabled) return;
 
-
         try {
             const authorId = localStorage.getItem('currentUserId');
             const title = String(titleInput.value).trim();
             const article = String(articleInput.value).trim();
+            const articleImage = articleImageInput.files[0];
             const category = "COMMUNITY";
 
-            const response = await requestMakePost(authorId, title, article, category);
+            const response = await requestMakePost(authorId, title, article, articleImage, category);
             const responseBody = response.data;
 
             const toastLogic = {

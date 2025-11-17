@@ -19,11 +19,13 @@ export function modal(modalLogic) {
     const cancelButton = root.querySelector('#modal-cancel-btn');
     const confirmButton = root.querySelector('#modal-confirm-btn');
 
+    // 모달창 취소버튼 클릭 시 로직
     cancelButton.addEventListener('click', () => {
         modalLogic.cancelLogic();
         root.remove();
     })
 
+    // 모달창 확인버튼 클릭 시 로직
     confirmButton.addEventListener('click', () => {
         modalLogic.confirmLogic();
         root.remove();

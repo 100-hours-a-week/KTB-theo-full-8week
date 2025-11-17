@@ -1,11 +1,10 @@
 import { activeFeatureCss } from "../../../../../shared/lib/dom.js";
 import { isBetweenLength, isBlank, isValidPasswordPattern } from "../../../../../shared/lib/util/util.js";
 import { cssPath } from "../../../../../shared/path/cssPath.js";
-import { Api } from "../../../../../shared/lib/api.js";
-import { apiPath } from "../../../../../shared/path/apiPath.js";
-import { ApiError } from "../../../../../shared/lib/api-error.js";
+import { ApiError } from "../../../../../shared/lib/api/api-error.js";
 import { navigate } from "../../../../../shared/lib/router.js";
-import { toast } from "../../../../../shared/ui/toast/toast.js";
+import { toast } from "../../../../../shared/ui/toast/js/toast.js";
+import { requestEditPassword } from "../../../../../shared/lib/api/user-api.js";
 
 activeFeatureCss(cssPath.EDIT_PASSWORD_CSS_PATH);
 
@@ -18,7 +17,7 @@ export function editPassword() {
             <h2>비밀번호 수정</h2>
             <form id="edit-password-form">
                 <div class="edit-password-field">
-                    <label class="edit-password-label" for="edit-password-form-email">비밀번호</label>
+                    <label class="edit-password-label" for="edit-password-form-password">비밀번호</label>
                     <input id="edit-password-form-password" name="password" type="password" class="edit-password-input"
                         required placeholder="비밀번호를 입력하세요" />
                 </div>
@@ -165,18 +164,5 @@ export function editPassword() {
         }
     }
 
-
-    // API 요청함수
-    // 1. 비밀번호 수정 요청 API
-    async function requestEditPassword(userId, password) {
-        const response = await new Api()
-            .patch()
-            .url(apiPath.EDIT_PASSWORD_API_URL(userId))
-            .body({ password })
-            .print()
-            .request();
-
-        return response;
-    }
     return root;
 }

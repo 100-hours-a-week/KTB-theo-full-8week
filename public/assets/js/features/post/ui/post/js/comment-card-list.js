@@ -1,11 +1,10 @@
 import { activeFeatureCss } from "../../../../../shared/lib/dom.js";
 import { cssPath } from "../../../../../shared/path/cssPath.js";
-import { Api } from "../../../../../shared/lib/api.js";
-import { apiPath } from "../../../../../shared/path/apiPath.js";
 import { isBlank, getNowData } from "../../../../../shared/lib/util/util.js";
 import { comment } from "./comment.js";
-import { ApiError } from "../../../../../shared/lib/api-error.js";
+import { ApiError } from "../../../../../shared/lib/api/api-error.js";
 import { emit, eventBus } from "../../../../../shared/lib/eventBus.js";
+import { requestUpdateComment, requestFindComments, requestCreateComment } from "../../../../../shared/lib/api/post-api.js";
 
 activeFeatureCss(cssPath.COMMENT_CARD_LIST_CSS_PATH);
 
@@ -232,46 +231,5 @@ export function commentCardList(postId) {
         targetButton.classList.add('active');
         targetButton.disabled = false;
     }
-
-    // API 요청 함수
-    // 1. 댓글 생성 API 요청
-    async function requestCreateComment(postId, userId, content) {
-        const response = await new Api()
-            .post()
-            .url(apiPath.CREATE_COMMENT_API_URL(postId))
-            .body({
-                userId: userId,
-                content: content
-            })
-            .print()
-            .request();
-
-        return response;
-    }
-
-    // 2. 게시글 댓글 조회 API 요청
-    // start, default Page = 0
-    async function requestFindComments(postId, page, size) {
-        const response = await new Api()
-            .get()
-            .url(apiPath.FIND_COMMENTS_API_URL(postId))
-            .queryString({ page, size })
-            .print()
-            .request();
-
-        return response;
-    }
     return root;
-
-    // 3. 댓글 수정 API 요청
-    async function requestUpdateComment(postId, commentId, content) {
-        const response = await new Api()
-            .patch()
-            .url(apiPath.UPDATE_COMMENT_API_URL(postId, commentId))
-            .body({ content })
-            .print()
-            .request();
-
-        return response;
-    }
 }

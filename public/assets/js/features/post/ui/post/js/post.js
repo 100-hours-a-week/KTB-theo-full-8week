@@ -1,12 +1,13 @@
 import { activeFeatureCss } from "../../../../../shared/lib/dom.js";
 import { emit, eventBus } from "../../../../../shared/lib/eventBus.js";
 import { cssPath } from "../../../../../shared/path/cssPath.js";
-import { Api } from "../../../../../shared/lib/api.js";
+import { Api } from "../../../../../shared/lib/api/api.js";
 import { apiPath } from "../../../../../shared/path/apiPath.js";
 import { commentCardList } from "./comment-card-list.js";
-import { ApiError } from "../../../../../shared/lib/api-error.js";
+import { ApiError } from "../../../../../shared/lib/api/api-error.js";
 import { modal } from "../../../../../shared/ui/modal/js/modal.js";
 import { editPost } from "../../edit-post/js/edit-post.js";
+import { requestPostDelete, requestPostDetail, requestPostLike, requestPostLikeCancel } from "../../../../../shared/lib/api/post-api.js";
 
 activeFeatureCss(cssPath.POST_CSS_PATH);
 
@@ -177,52 +178,6 @@ export async function post(postId) {
 
         const modalComponent = modal(modalLogic);
         root.appendChild(modalComponent);
-    }
-
-    // API 요청 함수
-    // 1. 현재 post 조회 요청 API
-    async function requestPostDetail(postId) {
-        const response = await new Api()
-            .get()
-            .url(apiPath.POST_DETAIL_API_URL(postId))
-            .print()
-            .request();
-
-        return response;
-    }
-    // 2. post 좋아요 활성화 요청 API
-    async function requestPostLike(postId, userId) {
-        const response = await new Api()
-            .post()
-            .url(apiPath.POST_LIKE_API_URL(postId))
-            .body({ userId })
-            .print()
-            .request();
-
-        return response;
-    }
-
-    // 3. post 좋아요 비활성화 요청 API
-    async function requestPostLikeCancel(postId, userId) {
-        const response = await new Api()
-            .post()
-            .url(apiPath.POST_LIKE_CANCEL_API_URL(postId))
-            .body({ userId })
-            .print()
-            .request();
-
-        return response;
-    }
-
-    // 4. 게시글 삭제 요청 API
-    async function requestPostDelete(postId) {
-        const response = await new Api()
-            .delete()
-            .url(apiPath.DELETE_POST_API_URL(postId))
-            .print()
-            .request();
-
-        return response;
     }
     return root;
 }
