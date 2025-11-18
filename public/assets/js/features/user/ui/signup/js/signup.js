@@ -171,11 +171,9 @@ export function signup() {
         const isEmailValid = handleInvalidEmail();
         const isPassowordValid = handleInvalidPassword();
         const isEqualPassword = handleEqualPasswordInput();
-        const isNicknamePatternValid = handleInvalidNicknamePattern();
         const isProfileImageValid = handleInvalidProfileImage();
 
-        const canActive = isEmailValid && isPassowordValid && isEqualPassword && isNicknamePatternValid
-            && isAvailableEmail && isAvailableNickname && isProfileImageValid;
+        const canActive = isEmailValid && isPassowordValid && isEqualPassword && isAvailableEmail && isAvailableNickname && isProfileImageValid;
         signupButton.classList.toggle('active', canActive);
         signupButton.disabled = !canActive;
     }

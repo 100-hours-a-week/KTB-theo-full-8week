@@ -150,7 +150,7 @@ export function commentCardList(postId) {
 
             const newCommentData = {
                 id: responseBody.id,
-                authorId: localStorage.getItem('currentUserId'),
+                authorId: userId,
                 authorNickname: localStorage.getItem('nickname'),
                 authorProfileImage: localStorage.getItem('profileImage'),
                 updatedAt: getNowData(),

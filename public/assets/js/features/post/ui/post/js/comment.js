@@ -8,7 +8,7 @@ import { requestCommentDelete } from "../../../../../shared/lib/api/post-api.js"
 activeFeatureCss(cssPath.COMMENT_CSS_PATH);
 
 export function comment(commentData, postId) {
-    console.log("render");
+    const currentUserNickname = localStorage.getItem('nickname');
     const { id, authorId, authorNickname, authorProfileImage, updatedAt, content } = commentData;
     const root = document.createElement('div');
     root.className = 'comment-container';
@@ -30,8 +30,8 @@ export function comment(commentData, postId) {
                 </div>
             </div>
             <div class="comment-control-field">
-                <button id="comment-update-btn" class="comment-control-btn">수정</button>
-                <button id="comment-delete-btn" class="comment-control-btn">삭제</button>
+                <button id="comment-update-btn" class="comment-control-btn" ${currentUserNickname !== authorNickname ? "hidden" : ''}>수정</button>
+                <button id="comment-delete-btn" class="comment-control-btn" ${currentUserNickname !== authorNickname ? "hidden" : ''}>삭제</button>
             </div>
         </div>
         `;

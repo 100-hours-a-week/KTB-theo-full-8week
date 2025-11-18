@@ -72,6 +72,7 @@ export async function requestCreateComment(postId, userId, content) {
             userId: userId,
             content: content
         })
+        .print()
         .request();
 
     return response;

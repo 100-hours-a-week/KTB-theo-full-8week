@@ -14,7 +14,7 @@ activeFeatureCss(cssPath.POST_CSS_PATH);
 export async function post(postId) {
     const responseBody = await requestPostDetail(postId); // 게시글 상세 조회
     const postDetail = responseBody.data;
-
+    const currentUserNickname = localStorage.getItem('nickname');
     const { id, title, authorNickname,
         article, articleImage, authorImage,
         commentCount, createdAt, hit, like, category } = postDetail;
@@ -41,8 +41,8 @@ export async function post(postId) {
                         <p class="post-createdat">${createdAt}</p>
                     </div>
                     <div class="post-control-field">
-                        <button id="post-update-btn" class="post-control-btn">수정</button>
-                        <button id="post-delete-btn" class="post-control-btn">삭제</button>
+                        <button id="post-update-btn" class="post-control-btn" ${currentUserNickname !== authorNickname ? "hidden" : ""}>수정</button>
+                        <button id="post-delete-btn" class="post-control-btn" ${currentUserNickname !== authorNickname ? "hidden" : ""}>삭제</button>
                     </div>
                 </div>
             </div>

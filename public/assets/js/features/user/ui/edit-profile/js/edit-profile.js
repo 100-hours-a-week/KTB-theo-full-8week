@@ -115,7 +115,7 @@ export async function editProfile() {
             return;
         }
 
-        const isAvailableNickname = handleInvalidNicknamePattern() && !isDuplicatedNickname;
+        const isAvailableNickname = !isDuplicatedNickname;
         const canActive = isAvailableNickname;
 
         profileUpdateButton.classList.toggle('active', canActive);
@@ -155,7 +155,7 @@ export async function editProfile() {
             return false;
         }
 
-        helpertext.textContent = '';
+        // helpertext.textContent = '';
         return true;
     }
 
